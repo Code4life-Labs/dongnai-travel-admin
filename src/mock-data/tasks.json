@@ -19,8 +19,8 @@
     "status": {
       "_id": "1",
       "order": "1",
-      "name": "Considering",
-      "value": "considering",
+      "name": "Verified",
+      "value": "verified",
       "createdAt": 1734402915812,
       "updatedAt": 1734402915812
     },
@@ -101,8 +101,8 @@
     "status": {
       "_id": "0",
       "order": "0",
-      "name": "Not Started",
-      "value": "not_started",
+      "name": "Unverifed",
+      "value": "unverified",
       "createdAt": 1734402915812,
       "updatedAt": 1734402915812
     },
@@ -183,8 +183,8 @@
     "status": {
       "_id": "1",
       "order": "1",
-      "name": "Considering",
-      "value": "considering",
+      "name": "Verified",
+      "value": "verified",
       "createdAt": 1734402915812,
       "updatedAt": 1734402915812
     },
@@ -347,8 +347,8 @@
     "status": {
       "_id": "0",
       "order": "0",
-      "name": "Not Started",
-      "value": "not_started",
+      "name": "Unverifed",
+      "value": "unverified",
       "createdAt": 1734402915812,
       "updatedAt": 1734402915812
     },
@@ -388,8 +388,8 @@
     "status": {
       "_id": "1",
       "order": "1",
-      "name": "Considering",
-      "value": "considering",
+      "name": "Verified",
+      "value": "verified",
       "createdAt": 1734402915812,
       "updatedAt": 1734402915812
     },
@@ -511,8 +511,8 @@
     "status": {
       "_id": "1",
       "order": "1",
-      "name": "Considering",
-      "value": "considering",
+      "name": "Verified",
+      "value": "verified",
       "createdAt": 1734402915812,
       "updatedAt": 1734402915812
     },
@@ -552,8 +552,8 @@
     "status": {
       "_id": "0",
       "order": "0",
-      "name": "Not Started",
-      "value": "not_started",
+      "name": "Unverifed",
+      "value": "unverified",
       "createdAt": 1734402915812,
       "updatedAt": 1734402915812
     },
@@ -716,8 +716,8 @@
     "status": {
       "_id": "0",
       "order": "0",
-      "name": "Not Started",
-      "value": "not_started",
+      "name": "Unverifed",
+      "value": "unverified",
       "createdAt": 1734402915812,
       "updatedAt": 1734402915812
     },
@@ -880,8 +880,8 @@
     "status": {
       "_id": "1",
       "order": "1",
-      "name": "Considering",
-      "value": "considering",
+      "name": "Verified",
+      "value": "verified",
       "createdAt": 1734402915812,
       "updatedAt": 1734402915812
     },

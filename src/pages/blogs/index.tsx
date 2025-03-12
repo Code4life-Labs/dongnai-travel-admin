@@ -3,16 +3,8 @@ import { CircleAlert, Moon } from "lucide-react";
 
 // Import components
 import BoardView from "./components/board-view";
-import TableView from "./components/table-view";
 import { Button } from "src/components/ui/button";
 import { Progress } from "src/components/ui/progress";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "src/components/ui/tabs";
-import { Input } from "src/components/ui/input";
 
 // Import objects
 import { UserAPI } from "src/objects/user/api";
@@ -20,7 +12,7 @@ import { UserAPI } from "src/objects/user/api";
 // Import states
 import { useTaskState } from "src/states/task";
 
-export default function TodoPage() {
+export default function BlogsPage() {
   const { tasks, tasksByStatus, setTasks, clearTasks } = useTaskState();
 
   const completeTasks = tasksByStatus ? tasksByStatus.get("done") : null;
@@ -79,37 +71,7 @@ export default function TodoPage() {
 
       <hr className="my-3" />
       <section className="flex flex-1 overflow-hidden">
-        <Tabs defaultValue="board" className="w-full flex flex-col">
-          <div className="flex justify-between items-center">
-            <TabsList className="w-fit">
-              <TabsTrigger value="board">Board</TabsTrigger>
-              <TabsTrigger value="table">Table</TabsTrigger>
-            </TabsList>
-            <div className="flex w-full max-w-sm items-center space-x-2 py-1">
-              <Input className="w-full" type="text" placeholder="Filter:" />
-              <div className="flex items-center">
-                <Button className="me-2" variant="outline" type="submit">
-                  Clear
-                </Button>
-                <Button variant="default" type="submit">
-                  Save
-                </Button>
-              </div>
-            </div>
-          </div>
-          <TabsContent
-            className="overflow-hidden data-[state=active]:flex data-[state=active]:flex-1"
-            value="board"
-          >
-            <BoardView />
-          </TabsContent>
-          <TabsContent
-            className="overflow-auto data-[state=active]:flex data-[state=active]:flex-1"
-            value="table"
-          >
-            <TableView />
-          </TabsContent>
-        </Tabs>
+        <BoardView />
       </section>
     </div>
   );

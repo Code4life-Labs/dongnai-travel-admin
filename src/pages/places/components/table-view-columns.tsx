@@ -4,16 +4,6 @@ import { PencilLine, Check } from "lucide-react";
 
 // Import components
 import { DatePicker } from "src/components/date-picker";
-import {
-  TaskSizeBadge,
-  TaskPriorityBadge,
-  TaskStatusBadge,
-} from "./task-attribute-badges";
-import {
-  TaskPriorityDropdownMenu,
-  TaskSizeDropdownMenu,
-  TaskStatusDropdownMenu,
-} from "./task-attributes-select-list";
 import { Input } from "src/components/ui/input";
 
 // Import objects
@@ -195,85 +185,6 @@ export const taskColumns: ColumnDef<TaskType>[] = [
                 }
               );
             }}
-          />
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "priority",
-    header: "Priority",
-    cell: ({ row }) => {
-      const { updateTask } = useTaskState();
-      const taskId = row.getValue("_id") as string;
-      const priority = row.getValue("priority") as any;
-
-      return (
-        <div className="flex items-center justify-between">
-          <TaskPriorityBadge data={priority} />
-          <TaskPriorityDropdownMenu
-            onSelect={(value) => {
-              // Request to update task
-              UserAPI.updateTask(taskId, { priorityId: value }).then(
-                (response) => {
-                  // Update task state
-                  updateTask(response!.data);
-                }
-              );
-            }}
-            defaultValue={priority._id}
-          />
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => {
-      const { updateTask } = useTaskState();
-      const taskId = row.getValue("_id") as string;
-      const status = row.getValue("status") as any;
-
-      return (
-        <div className="flex items-center justify-between">
-          <TaskStatusBadge data={status} />
-          <TaskStatusDropdownMenu
-            onSelect={(value) => {
-              // Request to update task
-              UserAPI.updateTask(taskId, { statusId: value }).then(
-                (response) => {
-                  // Update task state
-                  updateTask(response!.data);
-                }
-              );
-            }}
-            defaultValue={status._id}
-          />
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "size",
-    header: "Size",
-    cell: ({ row }) => {
-      const { updateTask } = useTaskState();
-      const taskId = row.getValue("_id") as string;
-      const size = row.getValue("size") as any;
-
-      return (
-        <div className="flex items-center justify-between">
-          <TaskSizeBadge data={size} />
-          <TaskSizeDropdownMenu
-            onSelect={(value) => {
-              // Request to update task
-              UserAPI.updateTask(taskId, { sizeId: value }).then((response) => {
-                // Update task state
-                updateTask(response!.data);
-              });
-            }}
-            defaultValue={size._id}
           />
         </div>
       );

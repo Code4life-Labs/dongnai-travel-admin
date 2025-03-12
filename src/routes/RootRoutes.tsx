@@ -4,8 +4,6 @@ import { Outlet, useRoutes, Navigate } from "react-router-dom";
 // Import components
 import Signin from "src/pages/auth/components/sign-in";
 import Signup from "src/pages/auth/components/sign-up";
-import Tasks from "src/pages/todo/components/task";
-import CompleteTasks from "src/pages/todo/components/complete-task";
 
 // Import hooks
 import { useAuth } from "src/hooks/use-auth";
@@ -15,8 +13,8 @@ import DashboardLayout from "src/layouts/dashboard";
 
 // Import pages
 import AuthPage from "src/pages/auth";
-import HomePage from "src/pages/home";
-import TodoPage from "src/pages/todo";
+import PlacesPage from "src/pages/places";
+import BlogsPage from "src/pages/blogs";
 
 // Import utils
 import { CookieUtils } from "src/utils/cookies";
@@ -26,9 +24,9 @@ import type { RouteObject } from "react-router-dom";
 
 export const AuthenticatedRoutesMetadata = new Map([
   ["/", "Task Manager"],
-  ["/tasks", "Your tasks"],
-  ["/search", "Search"],
-  ["/settings", "Settings"],
+  ["/places", "Places"],
+  ["/blogs", "Blogs"],
+  ["/reports", "Reports"],
 ]);
 
 const unAuthenticatedRoutes: Array<RouteObject> = [
@@ -62,12 +60,16 @@ const authenticatedRoutes: Array<RouteObject> = [
     ),
     children: [
       {
-        path: "/tasks",
-        element: <TodoPage />,
+        path: "/blogs",
+        element: <BlogsPage />,
+      },
+      {
+        path: "/places",
+        element: <PlacesPage />,
       },
       {
         path: "/",
-        element: <Navigate to="/tasks" replace />,
+        element: <Navigate to="/places" replace />,
       },
     ],
   },

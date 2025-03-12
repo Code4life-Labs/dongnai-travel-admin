@@ -65,33 +65,13 @@ export class TaskUtils {
     else value = status.value;
 
     switch (value) {
-      case "not_started": {
-        result = `border-gray-400 bg-gray-100`;
-        break;
-      }
-
-      case "considering": {
-        result = `border-blue-700 bg-blue-100`;
-        break;
-      }
-
-      case "bug": {
+      case "unverified": {
         result = `border-red-700 bg-red-100`;
         break;
       }
 
-      case "drop": {
-        result = `border-orange-700 bg-orange-100`;
-        break;
-      }
-
-      case "done": {
+      case "verified": {
         result = `border-green-700 bg-green-100`;
-        break;
-      }
-
-      case "in_process": {
-        result = `border-yellow-700 bg-yellow-100`;
         break;
       }
     }

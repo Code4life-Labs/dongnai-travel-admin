@@ -39,7 +39,7 @@ export default function Signup() {
     <div className="w-full max-w-[480px] bg-white p-6 rounded-lg border border-blue-700">
       <header>
         <h1 className="font-bold text-4xl">Sign up</h1>
-        <p>Let we know you</p>
+        <p>Let's create new admin user!</p>
       </header>
       <hr className="my-3" />
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>

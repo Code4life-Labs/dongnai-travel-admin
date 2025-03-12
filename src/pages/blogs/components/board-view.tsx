@@ -46,7 +46,7 @@ export default function BoardView() {
 
   return (
     <div className="relative w-full flex flex-1 border p-2 bg-secondary rounded-lg overflow-x-auto">
-      <div className="flex flex-1">
+      <div className="flex justify-between gap-3 flex-1">
         {tasksByStatus === null ? (
           <p>Loading...</p>
         ) : (
@@ -59,6 +59,8 @@ export default function BoardView() {
                 taskStatuses,
                 statusValue
               );
+
+              if (!status) return;
 
               let statusCircleClassName =
                 "w-5 h-5 rounded-full border border-[3px]";
@@ -95,7 +97,7 @@ export default function BoardView() {
                     // Un-highlight column
                     removeOutlineClassName(columnRefs.current, status.name);
                   }}
-                  className="flex flex-col bg-white rounded-lg border w-[420px] min-w-[420px] h-full me-3 pt-5 pb-3 overflow-y-hidden"
+                  className="flex flex-col bg-white rounded-lg border w-full min-w-[420px] h-full pt-5 pb-3 overflow-y-hidden"
                 >
                   <header className="flex flex-col px-3">
                     <div className="flex items-center justify-between">
@@ -119,7 +121,7 @@ export default function BoardView() {
                       })
                     )}
                   </div>
-                  <TaskFormDialog
+                  {/* <TaskFormDialog
                     TriggerContent={
                       <Button
                         className="w-full"
@@ -129,7 +131,7 @@ export default function BoardView() {
                         <Plus /> Add new item
                       </Button>
                     }
-                  />
+                  /> */}
                 </div>
               );
             })

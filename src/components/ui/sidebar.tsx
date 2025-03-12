@@ -307,7 +307,7 @@ const SidebarTrigger = React.forwardRef<
               className="cursor-pointer"
               onClick={() => navigate("/")}
             >
-              Task Manager
+              DongNaiTravel Admin
             </BreadcrumbLink>
           </BreadcrumbItem>
           {parts.length > 0 &&

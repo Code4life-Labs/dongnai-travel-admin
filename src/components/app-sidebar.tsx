@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
-import { BriefcaseBusiness, Search, Settings } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { cn } from "src/lib/utils";
+import { MessageCircleWarning, Newspaper, Earth } from "lucide-react";
 
 // Import components
 import { Avatar, AvatarFallback, AvatarImage } from "src/components/ui/avatar";
@@ -23,20 +24,25 @@ import { AuthenticatedRoutesMetadata } from "src/routes/RootRoutes";
 // Menu items.
 const items = [
   {
-    url: "/tasks",
-    icon: BriefcaseBusiness,
+    url: "/places",
+    icon: Earth,
   },
   {
-    url: "/search",
-    icon: Search,
+    url: "/blogs",
+    icon: Newspaper,
   },
   {
-    url: "/settings",
-    icon: Settings,
+    url: "/reports",
+    icon: MessageCircleWarning,
   },
 ];
 
 export function AppSidebar() {
+  const location = useLocation();
+  const parts = location.pathname.split("/").filter((part) => part !== "");
+
+  console.log("Parts:", parts);
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -46,7 +52,7 @@ export function AppSidebar() {
             <AvatarFallback className="rounded-lg">App</AvatarFallback>
           </Avatar>
           <div className="truncate grid flex-1 text-left text-sm leading-tight">
-            <h1 className="font-bold">Task Manager</h1>
+            <h1 className="font-bold">DongNaiTravel Admin</h1>
           </div>
         </div>
       </SidebarHeader>
@@ -57,6 +63,9 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem
+                  className={cn({
+                    "bg-slate-100": parts.includes(item.url.slice(1)),
+                  })}
                   key={AuthenticatedRoutesMetadata.get(item.url)}
                 >
                   <SidebarMenuButton asChild>
