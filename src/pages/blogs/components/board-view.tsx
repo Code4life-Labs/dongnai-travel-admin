@@ -1,17 +1,17 @@
 import React from "react";
-import { Plus, Ellipsis } from "lucide-react";
+import { Ellipsis } from "lucide-react";
 
 // Import objects
 import { UserAPI } from "src/objects/user/api";
-import { TaskUtils } from "src/objects/task/utils";
+import { BlogUtils } from "src/objects/blog/utils";
 
 // Import components
-import TaskFormDialog from "./task-form-dialog";
-import BoardViewTaskCard from "./board-view-task-card";
+import TaskFormDialog from "./blog-form-dialog";
+import BoardViewTaskCard from "./board-view-blog-card";
 import { Button } from "src/components/ui/button";
 
 // Import states
-import { useTaskState } from "src/states/task";
+import { useBlogState } from "src/states/blog";
 
 function addOutlineClassName(elements: any, statusName: string) {
   let element = elements.get(statusName);
@@ -38,8 +38,8 @@ function removeOutlineClassName(elements: any, statusName: string) {
  * @returns
  */
 export default function BoardView() {
-  const { tasksByStatus, taskStatuses, setCurrentTask, updateTask } =
-    useTaskState();
+  const { blogsByStatus, blogStatuses, setCurrentBlog, updateBlog } =
+    useBlogState();
   const columnRefs = React.useRef<Map<string, HTMLDivElement | null>>(
     new Map()
   );
@@ -47,16 +47,16 @@ export default function BoardView() {
   return (
     <div className="relative w-full flex flex-1 border p-2 bg-secondary rounded-lg overflow-x-auto">
       <div className="flex justify-between gap-3 flex-1">
-        {tasksByStatus === null ? (
+        {blogsByStatus === null ? (
           <p>Loading...</p>
         ) : (
-          tasksByStatus
+          blogsByStatus
             .entries()
             .toArray()
             .map((taskByStatus) => {
               const [statusValue, tasks] = taskByStatus;
-              const status = TaskUtils.getTaskAttributeByValue(
-                taskStatuses,
+              const status = BlogUtils.getBlogAttributeByValue(
+                blogStatuses,
                 statusValue
               );
 
@@ -64,7 +64,7 @@ export default function BoardView() {
 
               let statusCircleClassName =
                 "w-5 h-5 rounded-full border border-[3px]";
-              let statusCircleColor = TaskUtils.getStatusColor(status);
+              let statusCircleColor = BlogUtils.getStatusColor(status);
 
               if (statusCircleColor)
                 statusCircleClassName += " " + statusCircleColor;
@@ -77,10 +77,10 @@ export default function BoardView() {
                     const taskId = e.dataTransfer.getData("taskId");
 
                     // Update state: move task to order group
-                    UserAPI.updateTask(taskId, {
-                      statusId: status._id,
+                    UserAPI.updateBlog(taskId, {
+                      isApproved: status.value === "verified" ? true : false,
                     }).then((response) => {
-                      if (response?.data) updateTask(response?.data);
+                      if (response?.data) updateBlog(response?.data);
                     });
 
                     // Un-highlight column
@@ -126,7 +126,7 @@ export default function BoardView() {
                       <Button
                         className="w-full"
                         variant="outline"
-                        onClick={() => setCurrentTask(null)}
+                        onClick={() => ssetCurrentBlog(null)}
                       >
                         <Plus /> Add new item
                       </Button>

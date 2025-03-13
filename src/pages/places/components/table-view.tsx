@@ -3,7 +3,7 @@ import { TableViewDataTable } from "./table-view-datatable";
 import { taskColumns } from "./table-view-columns";
 
 // Import states
-import { useTaskState } from "src/states/task";
+import { useTaskState } from "src/states/blog";
 
 export default function TableView() {
   const { tasks } = useTaskState();

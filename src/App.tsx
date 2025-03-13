@@ -4,10 +4,10 @@ import React from "react";
 import RootRoutes from "./routes/RootRoutes";
 
 // Import objects
-import { TaskAPI } from "./objects/task/api";
+import { TaskAPI } from "./objects/blog/api";
 
 // Import states
-import { useTaskState } from "./states/task";
+import { useTaskState } from "./states/blog";
 
 function App() {
   const { setTaskPriorities, setTaskSizes, setTaskStatuses } = useTaskState();

@@ -6,7 +6,7 @@ import {
   TaskPriorityBadge,
   TaskSizeBadge,
   TaskStatusBadge,
-} from "./task-attribute-badges";
+} from "./blog-attribute-badges";
 import {
   Select,
   SelectContent,
@@ -33,7 +33,7 @@ import {
 } from "src/components/ui/form";
 
 // Import states
-import { useTaskState } from "src/states/task";
+import { useTaskState } from "src/states/blog";
 
 // Import type
 import type { UseFormReturn } from "react-hook-form";

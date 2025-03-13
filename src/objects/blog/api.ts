@@ -1,11 +1,7 @@
 import { API } from "src/api";
 
 // Import types
-import type {
-  TaskPriorityType,
-  TaskSizeType,
-  TaskStatusType,
-} from "../task/types";
+import type { TaskPriorityType, TaskSizeType, TaskStatusType } from "./types";
 
 const taskManagerAPI = new API({
   baseURL: import.meta.env.VITE_TASK_SERVICE_ENDPOINT,

@@ -16,7 +16,7 @@ import {
   TaskPriorityFormSelect,
   TaskSizeFormSelect,
   TaskStatusFormSelect,
-} from "./task-attributes-select-list";
+} from "./blog-attributes-select-list";
 import { Input } from "src/components/ui/input";
 import { Textarea } from "src/components/ui/textarea";
 import { Button } from "src/components/ui/button";
@@ -33,11 +33,11 @@ import {
 import { useAuth } from "src/hooks/use-auth";
 
 // Import objects
-import { TaskUtils } from "src/objects/task/utils";
+import { TaskUtils } from "src/objects/blog/utils";
 import { UserAPI } from "src/objects/user/api";
 
 // Import states
-import { useTaskState } from "src/states/task";
+import { useTaskState } from "src/states/blog";
 
 type TaskFormDialogProps = {
   TriggerContent: (() => JSX.Element) | JSX.Element;

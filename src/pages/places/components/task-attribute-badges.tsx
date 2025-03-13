@@ -4,7 +4,7 @@ import React from "react";
 import { Badge } from "src/components/ui/badge";
 
 // Import objects
-import { TaskUtils } from "src/objects/task/utils";
+import { TaskUtils } from "src/objects/blog/utils";
 
 import { cn } from "src/lib/utils";
 

@@ -1,15 +1,15 @@
 import { Ellipsis } from "lucide-react";
 
 // Import objects
-import { TaskUtils } from "src/objects/task/utils";
+import { TaskUtils } from "src/objects/blog/utils";
 
 // Import components
-import ColumnViewTaskCard from "./board-view-task-card";
+import ColumnViewTaskCard from "./board-view-blog-card";
 import AddItem from "./add-item";
 import { Button } from "src/components/ui/button";
 
 // Import states
-import { useTaskState } from "src/states/task";
+import { useTaskState } from "src/states/blog";
 
 export default function TimelineView() {
   const { tasksByStatus, taskStatuses } = useTaskState();

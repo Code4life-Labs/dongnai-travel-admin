@@ -2,8 +2,8 @@ import React from "react";
 import { Ellipsis, Trash2 } from "lucide-react";
 
 // Import components
-import TaskFormDialog from "./task-form-dialog";
-import { TaskSizeBadge, TaskPriorityBadge } from "./task-attribute-badges";
+import TaskFormDialog from "./blog-form-dialog";
+import { TaskSizeBadge, TaskPriorityBadge } from "./blog-attribute-badges";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,14 +12,14 @@ import {
 } from "src/components/ui/dropdown-menu";
 
 // Import hooks
-import { useTaskState } from "src/states/task";
+import { useTaskState } from "src/states/blog";
 
 // Import objects
 import { UserAPI } from "src/objects/user/api";
 
 // Import types
-import type { TaskType } from "src/objects/task/types";
-import { TaskUtils } from "src/objects/task/utils";
+import type { TaskType } from "src/objects/blog/types";
+import { TaskUtils } from "src/objects/blog/utils";
 
 type TaskCardProps = {
   data: TaskType;

@@ -2,15 +2,20 @@
 import type { RoleModelType } from "../auth/types";
 
 export type UserModelType = {
-  id?: string | number;
-  roleId?: string | number;
-  email?: string;
+  _id?: string;
+  roleId: string;
   firstName: string;
   lastName: string;
-  username?: string;
+  email: string;
+  username: string;
   hashedPassword?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  displayName: string;
+  birthday: number;
+  avatar: string;
+  coverPhoto: string;
+  isVerified: boolean;
+  createdAt?: number;
+  updatedAt?: number;
 };
 
 export type UserType = Omit<UserModelType, "hashedPassword" | "roleId"> & {
@@ -26,6 +31,7 @@ export type SignUpUserType = {
   email: string;
   firstName: string;
   lastName: string;
+  birthday: number;
   username: string;
   password: string;
   confirmedPassword: string;

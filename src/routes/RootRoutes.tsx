@@ -65,7 +65,7 @@ const authenticatedRoutes: Array<RouteObject> = [
       },
       {
         path: "/places",
-        element: <PlacesPage />,
+        element: <div>Hello</div>, // <PlacesPage />,
       },
       {
         path: "/",

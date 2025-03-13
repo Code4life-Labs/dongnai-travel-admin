@@ -5,25 +5,26 @@ import { BrowserStorageUtils } from "src/utils/browser_storage";
 
 // Import types
 import type { UserType } from "./types";
-import type { TaskType, TaskModelType } from "../task/types";
+import type { PlaceType, PlaceModelType } from "../place/types";
+import type { BlogType, BlogModelType } from "../blog/types";
 
-type UpdateTaskType = {
-  task: Partial<TaskModelType>;
-  assignees?: Array<string>;
+type UpdateBlogType = {
+  blog: Partial<BlogModelType>;
 };
 
-type CreateTaskType = {
-  task: TaskModelType;
-  assignees?: Array<string>;
+type CreateBlogType = {
+  blog: BlogModelType;
 };
 
-const taskManagerAPI = new API({
-  baseURL: import.meta.env.VITE_TASK_SERVICE_ENDPOINT,
-});
+type UpdatePlaceType = {
+  place: Partial<PlaceModelType>;
+};
 
-const identityAPI = new API({
-  baseURL: import.meta.env.VITE_IDENTITY_SERVICE_ENDPOINT,
-});
+type CreatePlaceType = {
+  place: PlaceModelType;
+};
+
+const api = new API();
 
 export class UserAPI {
   static getLocalUser() {
@@ -39,7 +40,7 @@ export class UserAPI {
   static async getUser() {
     try {
       const user = UserAPI.getLocalUser();
-      const response = await identityAPI.get<UserType>(`/users/${user.id}`, {
+      const response = await api.get<UserType>(`/users/${user._id}`, {
         headers: {
           Authorization: API.generateBearerToken(API.getToken()) as string,
         },
@@ -51,66 +52,58 @@ export class UserAPI {
   }
 
   /**
-   * Get tasks of a user
+   * Get blogs of a user
    * @returns
    */
-  static async getTasks(params?: Record<string, any>) {
+  static async getBlogs(params?: Record<string, any>) {
     if (!params) params = {};
     if (!params.limit) params.limit = 10;
     if (!params.skip) params.skip = 0;
 
     try {
-      const user = UserAPI.getLocalUser();
       const paramsStr = new URLSearchParams(params);
-      const response = await taskManagerAPI.get<Array<TaskType>>(
-        `/users/${user.id}/tasks?${paramsStr}`,
-        {
-          headers: {
-            Authorization: API.generateBearerToken(API.getToken()) as string,
-          },
-        }
-      );
+      const response = await api.get<Array<BlogType>>(`blogs?${paramsStr}`, {
+        headers: {
+          Authorization: API.generateBearerToken(API.getToken()) as string,
+        },
+      });
       return response.data;
     } catch (error) {
-      console.error("UserAPI - Get tasks:", error);
+      console.error("UserAPI - Get blogs:", error);
       return;
     }
   }
 
   /**
-   * Get a task of user by its id
-   * @param taskId
+   * Get a blog of user by its id
+   * @param blogId
    * @returns
    */
-  static async getTask(taskId: string | number) {
+  static async getBlog(blogId: string | number) {
     try {
-      const user = UserAPI.getLocalUser();
-      const response = await taskManagerAPI.get<TaskType>(
-        `users/${user.id}/tasks/${taskId}`,
-        {
-          headers: {
-            Authorization: API.generateBearerToken(API.getToken()) as string,
-          },
-        }
-      );
+      const response = await api.get<BlogType>(`blogs/${blogId}`, {
+        headers: {
+          Authorization: API.generateBearerToken(API.getToken()) as string,
+        },
+      });
       return response.data;
     } catch (error) {
-      console.error("UserAPI - Get task:", error);
+      console.error("UserAPI - Get blog:", error);
       return;
     }
   }
 
   /**
-   * Create a new task for user
-   * @param task
+   * Create a new blog for user
+   * @param blog
    * @returns
    */
-  static async createTask(task: TaskModelType) {
+  static async createBlog(blog: BlogModelType) {
     try {
       const user = UserAPI.getLocalUser();
-      const response = await taskManagerAPI.post<CreateTaskType, TaskType>(
-        `/users/${user.id}/task`,
-        { task },
+      const response = await api.post<CreateBlogType, BlogType>(
+        `/users/${user._id}/blog`,
+        { blog },
         {
           headers: {
             Authorization: API.generateBearerToken(API.getToken()) as string,
@@ -119,23 +112,23 @@ export class UserAPI {
       );
       return response.data;
     } catch (error) {
-      console.error("UserAPI - Create task:", error);
+      console.error("UserAPI - Create blog:", error);
       return;
     }
   }
 
   /**
-   * Update a task of user
+   * Update a blog of user
    * @param id
-   * @param task
+   * @param blog
    * @returns
    */
-  static async updateTask(id: string, task: Partial<TaskModelType>) {
+  static async updateBlog(id: string, blog: Partial<BlogModelType>) {
     try {
       const user = UserAPI.getLocalUser();
-      const response = await taskManagerAPI.patch<UpdateTaskType, TaskType>(
-        `/users/${user.id}/tasks/${id}`,
-        { task },
+      const response = await api.patch<UpdateBlogType, BlogType>(
+        `/users/${user._id}/blogs/${id}`,
+        { blog },
         {
           headers: {
             Authorization: API.generateBearerToken(API.getToken()) as string,
@@ -144,21 +137,21 @@ export class UserAPI {
       );
       return response.data;
     } catch (error) {
-      console.error("UserAPI - Update task:", error);
+      console.error("UserAPI - Update blog:", error);
       return;
     }
   }
 
   /**
-   * Delete a task of user
-   * @param taskId
+   * Delete a blog of user
+   * @param blogId
    * @returns
    */
-  static async deleteTask(taskId: string) {
+  static async deleteBlog(blogId: string) {
     try {
       const user = UserAPI.getLocalUser();
-      const response = await taskManagerAPI.delete<TaskType>(
-        `/users/${user.id}/tasks/${taskId}`,
+      const response = await api.delete<BlogType>(
+        `/users/${user._id}/blogs/${blogId}`,
         {
           headers: {
             Authorization: API.generateBearerToken(API.getToken()) as string,
@@ -167,7 +160,121 @@ export class UserAPI {
       );
       return response.data;
     } catch (error) {
-      console.error("UserAPI - Delete task:", error);
+      console.error("UserAPI - Delete blog:", error);
+      return;
+    }
+  }
+
+  /**
+   * Get places of a user
+   * @returns
+   */
+  static async getPlaces(params?: Record<string, any>) {
+    if (!params) params = {};
+    if (!params.limit) params.limit = 10;
+    if (!params.skip) params.skip = 0;
+
+    try {
+      const paramsStr = new URLSearchParams(params);
+      const response = await api.get<Array<PlaceType>>(`places?${paramsStr}`, {
+        headers: {
+          Authorization: API.generateBearerToken(API.getToken()) as string,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("UserAPI - Get places:", error);
+      return;
+    }
+  }
+
+  /**
+   * Get a place of user by its id
+   * @param placeId
+   * @returns
+   */
+  static async getPlace(placeId: string | number) {
+    try {
+      const response = await api.get<PlaceType>(`places/${placeId}`, {
+        headers: {
+          Authorization: API.generateBearerToken(API.getToken()) as string,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("UserAPI - Get place:", error);
+      return;
+    }
+  }
+
+  /**
+   * Create a new place for user
+   * @param place
+   * @returns
+   */
+  static async createPlace(place: PlaceModelType) {
+    try {
+      const user = UserAPI.getLocalUser();
+      const response = await api.post<CreatePlaceType, PlaceType>(
+        `/users/${user._id}/place`,
+        { place },
+        {
+          headers: {
+            Authorization: API.generateBearerToken(API.getToken()) as string,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("UserAPI - Create place:", error);
+      return;
+    }
+  }
+
+  /**
+   * Update a place of user
+   * @param id
+   * @param place
+   * @returns
+   */
+  static async updatePlace(id: string, place: Partial<PlaceModelType>) {
+    try {
+      const user = UserAPI.getLocalUser();
+      const response = await api.patch<UpdatePlaceType, PlaceType>(
+        `/users/${user._id}/places/${id}`,
+        { place },
+        {
+          headers: {
+            Authorization: API.generateBearerToken(API.getToken()) as string,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("UserAPI - Update place:", error);
+      return;
+    }
+  }
+
+  /**
+   * Delete a place of user
+   * @param placeId
+   * @returns
+   */
+  static async deletePlace(placeId: string) {
+    try {
+      const user = UserAPI.getLocalUser();
+      const response = await api.delete<PlaceType>(
+        `/users/${user._id}/places/${placeId}`,
+        {
+          headers: {
+            Authorization: API.generateBearerToken(API.getToken()) as string,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("UserAPI - Delete place:", error);
       return;
     }
   }

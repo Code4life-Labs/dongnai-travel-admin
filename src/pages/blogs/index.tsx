@@ -10,7 +10,7 @@ import { Progress } from "src/components/ui/progress";
 import { UserAPI } from "src/objects/user/api";
 
 // Import states
-import { useTaskState } from "src/states/task";
+import { useTaskState } from "src/states/blog";
 
 export default function BlogsPage() {
   const { tasks, tasksByStatus, setTasks, clearTasks } = useTaskState();

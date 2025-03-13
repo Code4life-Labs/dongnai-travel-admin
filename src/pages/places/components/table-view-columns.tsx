@@ -10,10 +10,10 @@ import { Input } from "src/components/ui/input";
 import { UserAPI } from "src/objects/user/api";
 
 // Import states
-import { useTaskState } from "src/states/task";
+import { useTaskState } from "src/states/blog";
 
 // Import types
-import type { TaskType } from "src/objects/task/types";
+import type { TaskType } from "src/objects/blog/types";
 
 export const taskColumns: ColumnDef<TaskType>[] = [
   {

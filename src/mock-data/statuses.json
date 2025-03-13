@@ -1,7 +1,7 @@
 [
   {
     "_id": "0",
-    "order": "0",
+    "order": 0,
     "name": "Unverified",
     "value": "unverified",
     "createdAt": 1734402915812,
@@ -9,7 +9,7 @@
   },
   {
     "_id": "1",
-    "order": "1",
+    "order": 1,
     "name": "Verified",
     "value": "verified",
     "createdAt": 1734402915812,
