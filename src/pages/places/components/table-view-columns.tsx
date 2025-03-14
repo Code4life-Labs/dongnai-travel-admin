@@ -10,12 +10,12 @@ import { Input } from "src/components/ui/input";
 import { UserAPI } from "src/objects/user/api";
 
 // Import states
-import { useTaskState } from "src/states/blog";
+import { usePlaceState } from "src/states/place";
 
 // Import types
-import type { TaskType } from "src/objects/blog/types";
+import type { PlaceType } from "src/objects/place/types";
 
-export const taskColumns: ColumnDef<TaskType>[] = [
+export const taskColumns: ColumnDef<PlaceType>[] = [
   {
     accessorKey: "_id",
     header: "id",
@@ -24,7 +24,7 @@ export const taskColumns: ColumnDef<TaskType>[] = [
     accessorKey: "name",
     header: "Name",
     cell: ({ row }) => {
-      const { updateTask } = useTaskState();
+      const { updatePlace } = usePlaceState();
       const [canEdit, setCanEdit] = React.useState(false);
       const taskId = row.getValue("_id") as string;
       const name = row.getValue("name") as any;
@@ -50,11 +50,11 @@ export const taskColumns: ColumnDef<TaskType>[] = [
                 onClick={() => {
                   if (inputRef.current) {
                     // Update task
-                    UserAPI.updateTask(taskId, {
+                    UserAPI.updatePlace(taskId, {
                       name: inputRef.current.value,
                     }).then((response) => {
                       // Update task state
-                      updateTask(response!.data);
+                      updatePlace(response!.data);
 
                       setCanEdit(false);
                     });
@@ -80,7 +80,7 @@ export const taskColumns: ColumnDef<TaskType>[] = [
     accessorKey: "description",
     header: "Description",
     cell: ({ row }) => {
-      const { updateTask } = useTaskState();
+      const { updatePlace } = usePlaceState();
       const [canEdit, setCanEdit] = React.useState(false);
       const taskId = row.getValue("_id") as string;
       const description = row.getValue("description") as any;
@@ -106,11 +106,11 @@ export const taskColumns: ColumnDef<TaskType>[] = [
                 onClick={() => {
                   if (inputRef.current) {
                     // Update task
-                    UserAPI.updateTask(taskId, {
+                    UserAPI.updatePlace(taskId, {
                       description: inputRef.current.value,
                     }).then((response) => {
                       // Update task state
-                      updateTask(response!.data);
+                      updatePlace(response!.data);
 
                       setCanEdit(false);
                     });
@@ -128,64 +128,6 @@ export const taskColumns: ColumnDef<TaskType>[] = [
               size="16px"
             />
           </div>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "startAt",
-    header: "Start date",
-    cell: ({ row }) => {
-      const { updateTask } = useTaskState();
-      const taskId = row.getValue("_id") as string;
-      const startAt = row.getValue("startAt") as any;
-
-      return (
-        <div className="flex items-center justify-between">
-          <p>{new Date(startAt).toLocaleDateString()}</p>
-          <DatePicker
-            TriggerContent={
-              <PencilLine className="cursor-pointer" color="gray" size="16px" />
-            }
-            date={new Date(startAt)}
-            setDate={(date: any) => {
-              UserAPI.updateTask(taskId, { startAt: date.getTime() }).then(
-                (response) => {
-                  // Update task state
-                  updateTask(response!.data);
-                }
-              );
-            }}
-          />
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "endAt",
-    header: "End date",
-    cell: ({ row }) => {
-      const { updateTask } = useTaskState();
-      const taskId = row.getValue("_id") as string;
-      const endAt = row.getValue("endAt") as any;
-
-      return (
-        <div className="flex items-center justify-between">
-          <p>{new Date(endAt).toLocaleDateString()}</p>
-          <DatePicker
-            TriggerContent={
-              <PencilLine className="cursor-pointer" color="gray" size="16px" />
-            }
-            date={new Date(endAt)}
-            setDate={(date: any) => {
-              UserAPI.updateTask(taskId, { endAt: date.getTime() }).then(
-                (response) => {
-                  // Update task state
-                  updateTask(response!.data);
-                }
-              );
-            }}
-          />
         </div>
       );
     },

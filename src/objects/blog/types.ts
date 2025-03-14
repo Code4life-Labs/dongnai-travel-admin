@@ -25,6 +25,10 @@ export type BlogType = Omit<
   type: VNRecordType;
   author: Partial<UserType>;
   mentionedPlaces: Array<Partial<PlaceType>>;
+  comments?: Array<any>;
+  isLiked: boolean;
+  totalComments: number;
+  totalFavorites: number;
 };
 
 export type BlogStatusType = {

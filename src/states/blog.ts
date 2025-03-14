@@ -51,9 +51,7 @@ function addBlogsToGroup(
     }
 
     // Append to blog list by reference
-    if (blogList.length === 0) {
-      blogList.push(blog);
-    }
+    blogList.push(blog);
   }
 }
 

@@ -1,6 +1,6 @@
 import React from "react";
-import { PencilLine } from "lucide-react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { PencilLine } from "lucide-react";
 
 // Import components
 import LoadingSpinner from "src/components/loading-spinner";
@@ -12,11 +12,6 @@ import {
   FormItem,
   FormMessage,
 } from "src/components/ui/form";
-import {
-  TaskPriorityFormSelect,
-  TaskSizeFormSelect,
-  TaskStatusFormSelect,
-} from "./blog-attributes-select-list";
 import { Input } from "src/components/ui/input";
 import { Textarea } from "src/components/ui/textarea";
 import { Button } from "src/components/ui/button";
@@ -24,90 +19,82 @@ import {
   Dialog,
   DialogTrigger,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "src/components/ui/dialog";
 
 // Import hooks
 import { useAuth } from "src/hooks/use-auth";
-
-// Import objects
-import { TaskUtils } from "src/objects/blog/utils";
 import { UserAPI } from "src/objects/user/api";
 
-// Import states
-import { useTaskState } from "src/states/blog";
+// Import state
+import { useBlogState } from "src/states/blog";
 
-type TaskFormDialogProps = {
+// Import utils
+import { BlogUtils } from "src/objects/blog/utils";
+
+type BlogFormValues = {
+  authorId: string;
+  typeId: string;
+  mentionedPlaceIds: string[];
+  name: string;
+  content: string;
+  coverImage: string;
+  images: string[];
+  readTime: number;
+  isApproved: boolean;
+};
+
+type BlogFormDialogProps = {
   TriggerContent: (() => JSX.Element) | JSX.Element;
 };
 
-/**
- * Use to render a task dialog form
- * @param props
- * @returns
- */
-export default function TaskFormDialog({
+export default function BlogFormDialog({
   TriggerContent,
-}: TaskFormDialogProps) {
-  const { currentTask, isResponding, addTask, updateTask, updateIsResponding } =
-    useTaskState();
+}: BlogFormDialogProps) {
+  const { currentBlog, isResponding, addBlog, updateBlog, updateIsResponding } =
+    useBlogState();
   const { user } = useAuth();
   const [isOpen, setIsOpen] = React.useState(false);
-  const form = useForm<any>({
-    defaultValues: {
-      priorityId: currentTask ? currentTask.priority._id : "",
-      statusId: currentTask ? currentTask.status._id : "",
-      sizeId: currentTask ? currentTask.size._id : "",
-      startAt: currentTask ? currentTask.startAt : Date.now(),
-      endAt: currentTask ? currentTask.endAt : Date.now(),
-    },
+
+  const form = useForm<BlogFormValues>({
+    defaultValues: currentBlog
+      ? BlogUtils.toModel(currentBlog)
+      : {
+          authorId: user?._id || "",
+          typeId: "",
+          mentionedPlaceIds: [],
+          name: "",
+          content: "",
+          coverImage: "",
+          images: [],
+          readTime: 0,
+          isApproved: false,
+        },
   });
 
-  const onSubmit: SubmitHandler<any> = (data) => {
+  const onSubmit: SubmitHandler<BlogFormValues> = async (data) => {
     if (!user) return;
-
-    const newTask = data;
-
-    // Prepare data
-    newTask.endAt = new Date(newTask.endAt).getTime();
-    newTask.startAt = new Date(newTask.startAt).getTime();
-    delete newTask.assignees;
-    delete newTask.updatedAt;
-
-    if (newTask.__v !== undefined || newTask.__v !== null) delete newTask.__v;
-
     updateIsResponding(true);
 
-    // Create new tasks
-    if (!currentTask)
-      UserAPI.createTask(newTask).then((payload) => {
-        if (payload) addTask(payload.data);
-        updateIsResponding(false);
-      });
-    else
-      UserAPI.updateTask(currentTask._id, newTask).then((payload) => {
-        if (payload) updateTask(payload.data);
-        updateIsResponding(false);
-      });
-
-    setIsOpen(false);
+    try {
+      let response;
+      if (currentBlog) {
+        response = await UserAPI.updateBlog(currentBlog._id, data);
+        if (response) updateBlog(response.data);
+      } else {
+        response = await UserAPI.createBlog(data);
+        if (response) addBlog(response.data);
+      }
+      setIsOpen(false);
+    } finally {
+      updateIsResponding(false);
+    }
   };
 
   React.useEffect(() => {
-    if (currentTask) {
-      form.reset(TaskUtils.toModel(currentTask));
-    } else {
-      form.reset({
-        priorityId: "",
-        statusId: "",
-        sizeId: "",
-        startAt: Date.now(),
-        endAt: Date.now(),
-      });
-    }
-  }, [currentTask]);
+    if (currentBlog) form.reset(BlogUtils.toModel(currentBlog));
+  }, [currentBlog, isOpen]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -118,112 +105,108 @@ export default function TaskFormDialog({
           TriggerContent
         )}
       </DialogTrigger>
-      <DialogContent
-        onCloseAutoFocus={(e: Event) => e.preventDefault()}
-        className="border-b border-b-2 pb-3 mb-6"
-      >
+      <DialogContent className="border-b border-b-2 pb-3 mb-6">
         <DialogHeader>
-          <DialogTitle>Create new item</DialogTitle>
-          <DialogDescription>Manage your work better</DialogDescription>
+          <DialogTitle>{currentBlog ? "Edit Blog" : "Create Blog"}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
-            className="flex flex-col w-full"
+            className="flex flex-col w-full gap-4"
             onSubmit={form.handleSubmit(onSubmit)}
           >
-            <div className="grid w-full items-center gap-1.5 mb-2">
-              <p className="font-semibold">Information</p>
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <Input
-                      className="w-full"
-                      type="text"
-                      id="name"
-                      placeholder="Your task name..."
+            {/* Blog Name */}
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <Input type="text" placeholder="Blog title..." {...field} />
+                </FormItem>
+              )}
+            />
+
+            {/* Content */}
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Write your blog content here..."
                       {...field}
                     />
-                  </FormItem>
-                )}
-              />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Textarea placeholder="Description" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div>
-              <p className="font-semibold">Attributes</p>
-              <div className="flex items-center justify-between ps-3 mb-2">
-                <p>Status</p>
-                <TaskStatusFormSelect form={form} name="statusId" />
-              </div>
-              <div className="flex items-center justify-between ps-3 mb-2">
-                <p>Priority</p>
-                <TaskPriorityFormSelect form={form} name="priorityId" />
-              </div>
-              <div className="flex items-center justify-between ps-3 mb-2">
-                <p>Size</p>
-                <TaskSizeFormSelect form={form} name="sizeId" />
-              </div>
-            </div>
-            <div>
-              <p className="font-semibold">Duration</p>
-              <div className="flex items-center justify-between ps-3 mb-2">
-                <p>Start at</p>
-                <DatePickerForm
-                  name="startAt"
-                  form={form}
-                  TriggerContent={({ fieldValue }) => {
-                    return (
-                      <div className="flex items-center">
-                        <p className="me-3">
-                          {new Date(fieldValue).toLocaleDateString()}
-                        </p>
-                        <PencilLine color="gray" size="16px" />
-                      </div>
-                    );
-                  }}
-                />
-              </div>
-              <div className="flex items-center justify-between ps-3 mb-2">
-                <p>End at</p>
-                <DatePickerForm
-                  name="endAt"
-                  form={form}
-                  TriggerContent={({ fieldValue }) => {
-                    return (
-                      <div className="flex items-center">
-                        <p className="me-3">
-                          {new Date(fieldValue).toLocaleDateString()}
-                        </p>
-                        <PencilLine color="gray" size="16px" />
-                      </div>
-                    );
-                  }}
-                />
-              </div>
-            </div>
+            {/* Cover Image */}
+            <FormField
+              control={form.control}
+              name="coverImage"
+              render={({ field }) => (
+                <FormItem>
+                  <Input type="text" placeholder="Cover image URL" {...field} />
+                </FormItem>
+              )}
+            />
+
+            {/* Images */}
+            <FormField
+              control={form.control}
+              name="images"
+              render={({ field }) => (
+                <FormItem>
+                  <Input
+                    type="text"
+                    placeholder="Comma-separated image URLs"
+                    {...field}
+                  />
+                </FormItem>
+              )}
+            />
+
+            {/* Read Time */}
+            <FormField
+              control={form.control}
+              name="readTime"
+              render={({ field }) => (
+                <FormItem>
+                  <Input
+                    type="number"
+                    placeholder="Estimated read time (minutes)"
+                    {...field}
+                  />
+                </FormItem>
+              )}
+            />
+
+            {/* Approval Status */}
+            <FormField
+              control={form.control}
+              name="isApproved"
+              render={({ field }) => (
+                <FormItem>
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" {...(field as any)} />
+                    <span>Approved</span>
+                  </label>
+                </FormItem>
+              )}
+            />
+
+            {/* Submit Button */}
             <Button
               type="submit"
               className="w-full mt-3"
-              variant={isResponding ? "ghost" : "default"}
               disabled={isResponding}
             >
               {isResponding ? (
-                <div className="flex justify-center items-center">
+                <div className="flex items-center gap-2">
                   <LoadingSpinner width="w-4" height="w-4" />
-                  <span className="ms-3">Adding...</span>
+                  <span>Submitting...</span>
                 </div>
               ) : (
                 "Submit"

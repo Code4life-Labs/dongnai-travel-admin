@@ -24,7 +24,9 @@ type CreatePlaceType = {
   place: PlaceModelType;
 };
 
-const api = new API();
+const api = new API({
+  baseURL: import.meta.env.VITE_TASK_API_ENDPOINT,
+});
 
 export class UserAPI {
   static getLocalUser() {
@@ -98,12 +100,12 @@ export class UserAPI {
    * @param blog
    * @returns
    */
-  static async createBlog(blog: BlogModelType) {
+  static async createBlog(blog: Partial<BlogModelType>) {
     try {
       const user = UserAPI.getLocalUser();
-      const response = await api.post<CreateBlogType, BlogType>(
+      const response = await api.post<Partial<BlogModelType>, BlogType>(
         `/users/${user._id}/blog`,
-        { blog },
+        blog,
         {
           headers: {
             Authorization: API.generateBearerToken(API.getToken()) as string,
@@ -126,9 +128,9 @@ export class UserAPI {
   static async updateBlog(id: string, blog: Partial<BlogModelType>) {
     try {
       const user = UserAPI.getLocalUser();
-      const response = await api.patch<UpdateBlogType, BlogType>(
+      const response = await api.patch<Partial<BlogModelType>, BlogType>(
         `/users/${user._id}/blogs/${id}`,
-        { blog },
+        blog,
         {
           headers: {
             Authorization: API.generateBearerToken(API.getToken()) as string,

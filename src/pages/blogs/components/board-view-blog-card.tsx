@@ -1,9 +1,9 @@
 import React from "react";
-import { Ellipsis, Trash2 } from "lucide-react";
+import { Ellipsis, Trash2, Clock, Heart } from "lucide-react";
 
 // Import components
-import TaskFormDialog from "./blog-form-dialog";
-import { TaskSizeBadge, TaskPriorityBadge } from "./blog-attribute-badges";
+import BlogFormDialog from "./blog-form-dialog";
+import { BlogStatusBadge } from "./blog-attribute-badges";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,44 +12,28 @@ import {
 } from "src/components/ui/dropdown-menu";
 
 // Import hooks
-import { useTaskState } from "src/states/blog";
+import { useBlogState } from "src/states/blog";
 
 // Import objects
 import { UserAPI } from "src/objects/user/api";
 
-// Import types
-import type { TaskType } from "src/objects/blog/types";
-import { TaskUtils } from "src/objects/blog/utils";
+// Import utils
+import { DatetimeUtils } from "src/utils/datetime";
 
-type TaskCardProps = {
-  data: TaskType;
+// Import types
+import type { BlogType } from "src/objects/blog/types";
+
+type BlogCardProps = {
+  data: BlogType;
 };
 
-function addOutlineClassName(element: any) {
-  if (element) {
-    element.classList.add(
-      "shadow-[0_0_0_2px_hsl(var(--primary))]",
-      "border-primary"
-    );
-  }
-}
-
-function removeOutlineClassName(element: any) {
-  if (element) {
-    element.classList.remove(
-      "shadow-[0_0_0_2px_hsl(var(--primary))]",
-      "border-primary"
-    );
-  }
-}
-
-export default function BoardViewTaskCard(props: TaskCardProps) {
-  const { setCurrentTask, deteteTask } = useTaskState();
+export default function BoardViewBlogCard({ data }: BlogCardProps) {
+  const { setCurrentBlog, deteteBlog } = useBlogState();
   const draggableCardRef = React.useRef<HTMLDivElement | null>(null);
 
   const handleDragStart = (e: React.DragEvent) => {
     if (draggableCardRef.current) {
-      e.dataTransfer.setData("taskId", props.data._id);
+      e.dataTransfer.setData("taskId", data._id);
     }
   };
 
@@ -58,42 +42,61 @@ export default function BoardViewTaskCard(props: TaskCardProps) {
       ref={draggableCardRef}
       draggable
       onDragStart={handleDragStart}
-      onMouseUp={() => {
-        removeOutlineClassName(draggableCardRef.current);
-      }}
-      onMouseDown={() => {
-        addOutlineClassName(draggableCardRef.current);
-      }}
-      onDragEnd={() => {
-        removeOutlineClassName(draggableCardRef.current);
-      }}
       className="relative flex cursor-grab bg-white shadow w-full justify-between px-3 py-2 rounded-lg border mb-3"
     >
-      <section className="w-4/5">
-        <TaskFormDialog
+      {/* Cover Image */}
+      {data.coverImage && (
+        <img
+          src={data.coverImage}
+          alt={data.name}
+          className="w-24 h-24 object-cover rounded-lg mr-3"
+        />
+      )}
+
+      {/* Blog Info */}
+      <section className="flex-1">
+        <BlogFormDialog
           TriggerContent={
             <header
-              onClick={() => setCurrentTask(props.data)}
+              onClick={() => setCurrentBlog(data)}
               className="text-left cursor-pointer hover:underline"
             >
-              <h3 className="font-bold ">{props.data.name}</h3>
-              <p className="text-ellipsis overflow-hidden">
-                {props.data.description}
-              </p>
+              <h3 className="font-bold">{data.name}</h3>
             </header>
           }
         />
 
-        <div>
-          <p className="text-xs">{TaskUtils.getStartEndDateStr(props.data)}</p>
+        {/* Meta Info */}
+        <div className="text-sm text-gray-500 mt-1 flex items-center gap-2">
+          <Clock className="w-4 h-4" />
+          <span>{DatetimeUtils.toMinute(data.readTime)} min to read</span>
+          <span className="mx-2">|</span>
+          <span className="text-primary">{data.type.name}</span>
         </div>
-        <div className="mt-2">
-          {props.data.priority && (
-            <TaskPriorityBadge className="me-2" data={props.data.priority} />
+
+        {/* Author Details */}
+        <div className="mt-2 flex items-center gap-2">
+          {data.author.avatar ? (
+            <img
+              src={data.author.avatar}
+              alt={data.author.displayName}
+              className="w-6 h-6 rounded-full"
+            />
+          ) : (
+            <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
           )}
-          {props.data.size && <TaskSizeBadge data={props.data.size} />}
+          <span className="text-sm font-medium">{data.author.displayName}</span>
+        </div>
+
+        {/* Blog Status */}
+        <div className="mt-2 flex items-center gap-2">
+          <BlogStatusBadge data={data.isApproved} />
+          <Heart className="w-4 h-4 text-red-500" />
+          <span className="text-sm">{data.totalFavorites}</span>
         </div>
       </section>
+
+      {/* Dropdown Menu */}
       <div className="flex">
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer" asChild>
@@ -102,8 +105,8 @@ export default function BoardViewTaskCard(props: TaskCardProps) {
           <DropdownMenuContent>
             <DropdownMenuItem
               onClick={() => {
-                UserAPI.deleteTask(props.data._id).then(() => {
-                  deteteTask(props.data);
+                UserAPI.deleteBlog(data._id).then(() => {
+                  deteteBlog(data);
                 });
               }}
               className="flex items-center cursor-pointer"

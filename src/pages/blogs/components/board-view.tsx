@@ -44,6 +44,10 @@ export default function BoardView() {
     new Map()
   );
 
+  React.useEffect(() => {
+    console.log("Blog by status:", blogsByStatus);
+  }, []);
+
   return (
     <div className="relative w-full flex flex-1 border p-2 bg-secondary rounded-lg overflow-x-auto">
       <div className="flex justify-between gap-3 flex-1">
@@ -64,7 +68,9 @@ export default function BoardView() {
 
               let statusCircleClassName =
                 "w-5 h-5 rounded-full border border-[3px]";
-              let statusCircleColor = BlogUtils.getStatusColor(status);
+              let statusCircleColor = BlogUtils.getStatusColor(
+                status.value === "verified" ? true : false
+              );
 
               if (statusCircleColor)
                 statusCircleClassName += " " + statusCircleColor;

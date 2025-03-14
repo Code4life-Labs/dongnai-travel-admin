@@ -1,57 +1,23 @@
 import { API } from "src/api";
 
 // Import types
-import type { TaskPriorityType, TaskSizeType, TaskStatusType } from "./types";
+import type { VNRecordType } from "src/types/general";
 
-const taskManagerAPI = new API({
-  baseURL: import.meta.env.VITE_TASK_SERVICE_ENDPOINT,
+const api = new API({
+  baseURL: import.meta.env.VITE_TASK_API_ENDPOINT,
 });
 
-export class TaskAPI {
+export class BlogAPI {
   /**
    * Get statuses of tasks
    * @returns
    */
-  static async getTasksStatuses() {
+  static async getBlogTypes() {
     try {
-      const response = await taskManagerAPI.get<Array<TaskStatusType>>(
-        `/tasks/statuses`
-      );
+      const response = await api.get<Array<VNRecordType>>(`/blogs/types`);
       return response.data;
     } catch (error) {
-      console.error("TaskAPI - Get tasks' statuses:", error);
-      return;
-    }
-  }
-
-  /**
-   * Get statuses of tasks
-   * @returns
-   */
-  static async getTasksPriorities() {
-    try {
-      const response = await taskManagerAPI.get<Array<TaskPriorityType>>(
-        `/tasks/priorities`
-      );
-      return response.data;
-    } catch (error) {
-      console.error("TaskAPI - Get tasks' priorities:", error);
-      return;
-    }
-  }
-
-  /**
-   * Get sizes of tasks
-   * @returns
-   */
-  static async getTasksSizes() {
-    try {
-      const response = await taskManagerAPI.get<Array<TaskSizeType>>(
-        `/tasks/sizes`
-      );
-      return response.data;
-    } catch (error) {
-      console.error("TaskAPI - Get tasks' sizes:", error);
+      console.error("TaskAPI - Get blogs' types:", error);
       return;
     }
   }

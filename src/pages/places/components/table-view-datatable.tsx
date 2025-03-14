@@ -30,7 +30,7 @@ import {
 import { UserAPI } from "src/objects/user/api";
 
 // Import state
-import { useTaskState } from "src/states/blog";
+import { usePlaceState } from "src/states/place";
 
 // Import types
 import type { Table as TanStackReactTable } from "@tanstack/react-table";
@@ -47,13 +47,13 @@ type DataTablePaginationProps<TData> = {
 export function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
-  const { addTasks } = useTaskState();
+  const { addPlaces } = usePlaceState();
 
   React.useEffect(() => {
     // Check if can go to next page
     if (!table.getCanNextPage()) {
       // Request more tasks
-      UserAPI.getTasks({
+      UserAPI.getPlaces({
         limit: table.getState().pagination.pageSize,
         skip:
           table.getState().pagination.pageSize *
@@ -64,7 +64,7 @@ export function DataTablePagination<TData>({
         // Check if tasks array isn't empty
         if (tasks && tasks.length > 0) {
           // Update tasks
-          addTasks(tasks);
+          addPlaces(tasks);
         }
       });
     }

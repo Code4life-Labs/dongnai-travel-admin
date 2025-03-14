@@ -3,18 +3,18 @@ import type { BlogType, BlogStatusType } from "src/objects/blog/types";
 
 export class BlogUtils {
   /**
-   * Get task by its `id`
-   * @param tasks
+   * Get blog by its `id`
+   * @param blogs
    * @param id
    * @returns
    */
-  static getBlogById(tasks: Array<BlogType> | null, id: string) {
-    if (!tasks) return null;
-    return tasks.find((task) => task._id === id);
+  static getBlogById(blogs: Array<BlogType> | null, id: string) {
+    if (!blogs) return null;
+    return blogs.find((blog) => blog._id === id);
   }
 
   /**
-   * Get attribute in attributes list of task by `name`
+   * Get attribute in attributes list of blog by `name`
    * @param attributes
    * @param name
    * @returns
@@ -25,7 +25,7 @@ export class BlogUtils {
   }
 
   /**
-   * Get attribute in attributes list of task by `id`
+   * Get attribute in attributes list of blog by `id`
    * @param attributes
    * @param name
    * @returns
@@ -36,7 +36,7 @@ export class BlogUtils {
   }
 
   /**
-   * Get attribute in attributes list of task by `value`
+   * Get attribute in attributes list of blog by `value`
    * @param attributes
    * @param name
    * @returns
@@ -51,12 +51,9 @@ export class BlogUtils {
    * @param status
    * @returns
    */
-  static getStatusColor(status: BlogStatusType | string) {
+  static getStatusColor(status: boolean) {
     let result = "";
-    let value = "";
-
-    if (typeof status === "string") value = status;
-    else value = status.value;
+    let value = status === true ? "verified" : "unverified";
 
     switch (value) {
       case "unverified": {
@@ -71,5 +68,21 @@ export class BlogUtils {
     }
 
     return result;
+  }
+
+  static toModel(blog?: BlogType) {
+    if (!blog) return;
+
+    return {
+      authorId: blog.author._id,
+      typeId: blog.type._id,
+      mentionedPlaceIds: blog.mentionedPlaces?.map((place) => place._id) || [],
+      name: blog.name,
+      content: blog.content,
+      coverImage: blog.coverImage,
+      images: blog.images || [],
+      readTime: blog.readTime,
+      isApproved: blog.isApproved,
+    };
   }
 }

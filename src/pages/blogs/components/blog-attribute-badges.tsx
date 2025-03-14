@@ -12,14 +12,14 @@ type BadgeProps = {
   data: any;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export function TaskStatusBadge({ className, data, ...props }: BadgeProps) {
+export function BlogStatusBadge({ className, data, ...props }: BadgeProps) {
   return (
     <Badge
       className={cn(BlogUtils.getStatusColor(data), className)}
       variant="outline"
       {...props}
     >
-      {data.name}
+      {data ? "Verified" : "Unverified"}
     </Badge>
   );
 }

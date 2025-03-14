@@ -4,13 +4,13 @@ import React from "react";
 import RootRoutes from "./routes/RootRoutes";
 
 // Import objects
-import { TaskAPI } from "./objects/blog/api";
+import { BlogAPI } from "./objects/blog/api";
 
 // Import states
-import { useTaskState } from "./states/blog";
+import { useBlogState } from "./states/blog";
 
 function App() {
-  const { setTaskPriorities, setTaskSizes, setTaskStatuses } = useTaskState();
+  const { setBlogStatuses } = useBlogState();
 
   React.useEffect(() => {
     // Fetch some values
@@ -18,27 +18,13 @@ function App() {
       // In development
       // Fetch data from mock data
       import("src/mock-data/statuses.json").then((result) => {
-        setTaskStatuses(result.default);
-      });
-
-      import("src/mock-data/sizes.json").then((result) => {
-        setTaskSizes(result.default);
-      });
-
-      import("src/mock-data/priorities.json").then((result) => {
-        setTaskPriorities(result.default);
+        setBlogStatuses(result.default);
       });
     } else if (import.meta.env.VITE_MODE === "prod") {
       // In production
       // Fetch data from server
-      Promise.all([
-        TaskAPI.getTasksStatuses(),
-        TaskAPI.getTasksSizes(),
-        TaskAPI.getTasksPriorities(),
-      ]).then(([statuses, sizes, priorities]) => {
-        setTaskStatuses(statuses?.data);
-        setTaskSizes(sizes?.data);
-        setTaskPriorities(priorities?.data);
+      import("src/mock-data/statuses.json").then((result) => {
+        setBlogStatuses(result.default);
       });
     }
   }, []);

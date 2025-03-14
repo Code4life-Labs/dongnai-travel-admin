@@ -22,4 +22,10 @@ export type PlaceModelType = {
 
 export type PlaceType = Omit<PlaceModelType, "typeIds"> & {
   types: Array<VNRecordType>;
+  totalFavorites: number;
+  totalVisits: number;
+  totalReviews: number;
+  rating: number;
+  isLiked: boolean;
+  isVisited: boolean;
 };
