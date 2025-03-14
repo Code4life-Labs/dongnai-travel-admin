@@ -52,19 +52,20 @@ export function DataTablePagination<TData>({
   React.useEffect(() => {
     // Check if can go to next page
     if (!table.getCanNextPage()) {
-      // Request more tasks
+      // Request more places
       UserAPI.getPlaces({
         limit: table.getState().pagination.pageSize,
         skip:
           table.getState().pagination.pageSize *
           (table.getState().pagination.pageIndex + 1),
       }).then((response) => {
-        const tasks = response?.data;
+        const places = response?.data;
 
-        // Check if tasks array isn't empty
-        if (tasks && tasks.length > 0) {
-          // Update tasks
-          addPlaces(tasks);
+        // Check if places array isn't empty
+        if (places && places.length > 0) {
+          // Update places
+          console.log("Places:", places);
+          addPlaces(places);
         }
       });
     }

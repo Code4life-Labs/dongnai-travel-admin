@@ -84,7 +84,7 @@ export const usePlaceState = create<PlaceState & PlaceActions>((set) => {
         if (!places) return state;
 
         // Add places to global places
-        if (state.places) state.places.concat(places);
+        if (state.places) state.places = state.places.concat(places);
 
         return {
           ...state,

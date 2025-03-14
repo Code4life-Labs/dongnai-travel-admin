@@ -36,6 +36,9 @@ export default function PlacesPage() {
   return (
     <div className="w-full h-[calc(100dvh-28px)] flex flex-col px-2 py-3">
       <header className="flex justify-between items-center px-3">
+        <div className="w-1/4">
+          <h1 className="text-lg font-bold">Places</h1>
+        </div>
         <div className="flex justify-end gap-2 w-3/4">
           <Button variant="outline">
             <CircleAlert />

@@ -11,6 +11,7 @@ export type PlaceModelType = {
   phoneNumber: string;
   name: string;
   plusCode: any;
+  content?: string;
   openHours: Array<any>;
   url: string;
   photos: Array<string>;

@@ -6,7 +6,7 @@ import { UserAPI } from "src/objects/user/api";
 import { BlogUtils } from "src/objects/blog/utils";
 
 // Import components
-import TaskFormDialog from "./blog-form-dialog";
+import TaskFormDialog from "../../places/components/place-form-dialog";
 import BoardViewTaskCard from "./board-view-blog-card";
 import { Button } from "src/components/ui/button";
 

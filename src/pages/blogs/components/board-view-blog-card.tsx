@@ -2,7 +2,7 @@ import React from "react";
 import { Ellipsis, Trash2, Clock, Heart } from "lucide-react";
 
 // Import components
-import BlogFormDialog from "./blog-form-dialog";
+import BlogFormDialog from "../../places/components/place-form-dialog";
 import { BlogStatusBadge } from "./blog-attribute-badges";
 import {
   DropdownMenu,

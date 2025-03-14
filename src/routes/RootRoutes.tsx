@@ -25,7 +25,9 @@ import type { RouteObject } from "react-router-dom";
 export const AuthenticatedRoutesMetadata = new Map([
   ["/", "Task Manager"],
   ["/places", "Places"],
+  ["/users", "Users"],
   ["/blogs", "Blogs"],
+  ["/banners", "Banners"],
   ["/reports", "Reports"],
 ]);
 
@@ -65,7 +67,19 @@ const authenticatedRoutes: Array<RouteObject> = [
       },
       {
         path: "/places",
-        element: <div>Hello</div>, // <PlacesPage />,
+        element: <PlacesPage />,
+      },
+      {
+        path: "/users",
+        element: <div className="w-full flex-1">Users Page</div>,
+      },
+      {
+        path: "/banners",
+        element: <div className="w-full flex-1">Banners Page</div>,
+      },
+      {
+        path: "/reports",
+        element: <div className="w-full flex-1">Reports Page</div>,
       },
       {
         path: "/",

@@ -1,10 +1,10 @@
 import React from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { PencilLine, Check } from "lucide-react";
 
 // Import components
-import { DatePicker } from "src/components/date-picker";
-import { Input } from "src/components/ui/input";
+import PlaceFormDialog from "./place-form-dialog";
+import { PlaceRecommendationBadge } from "./place-attribute-badges";
+import { Button } from "src/components/ui/button";
 
 // Import objects
 import { UserAPI } from "src/objects/user/api";
@@ -24,110 +24,94 @@ export const taskColumns: ColumnDef<PlaceType>[] = [
     accessorKey: "name",
     header: "Name",
     cell: ({ row }) => {
-      const { updatePlace } = usePlaceState();
-      const [canEdit, setCanEdit] = React.useState(false);
-      const taskId = row.getValue("_id") as string;
       const name = row.getValue("name") as any;
-
-      const inputRef = React.useRef<HTMLInputElement | null>(null);
 
       return (
         <div className="flex items-center gap-2 justify-between">
-          {canEdit ? (
-            <Input
-              ref={inputRef}
-              autoFocus
-              className="w-full shadow-none bg-white h-fit p-0"
-              type="text"
-              defaultValue={name}
-            />
-          ) : (
-            <p>{name}</p>
-          )}
-          <div className="flex items-center">
-            {canEdit && (
-              <Check
-                onClick={() => {
-                  if (inputRef.current) {
-                    // Update task
-                    UserAPI.updatePlace(taskId, {
-                      name: inputRef.current.value,
-                    }).then((response) => {
-                      // Update task state
-                      updatePlace(response!.data);
-
-                      setCanEdit(false);
-                    });
-                  }
-                }}
-                className="cursor-pointer me-2"
-                color="gray"
-                size="16px"
-              />
-            )}
-            <PencilLine
-              onClick={() => setCanEdit((state) => !state)}
-              className="cursor-pointer"
-              color="gray"
-              size="16px"
-            />
-          </div>
+          <p>{name}</p>
         </div>
       );
     },
   },
   {
-    accessorKey: "description",
-    header: "Description",
+    accessorKey: "isRecommended",
+    header: "Recommended",
     cell: ({ row }) => {
-      const { updatePlace } = usePlaceState();
-      const [canEdit, setCanEdit] = React.useState(false);
-      const taskId = row.getValue("_id") as string;
-      const description = row.getValue("description") as any;
-
-      const inputRef = React.useRef<HTMLInputElement | null>(null);
+      const isRecommended = row.getValue("isRecommended") as any;
 
       return (
         <div className="flex items-center gap-2 justify-between">
-          {canEdit ? (
-            <Input
-              ref={inputRef}
-              autoFocus
-              className="w-full shadow-none bg-white h-fit p-0"
-              type="text"
-              defaultValue={description}
-            />
-          ) : (
-            <p>{description}</p>
-          )}
-          <div className="flex items-center">
-            {canEdit && (
-              <Check
-                onClick={() => {
-                  if (inputRef.current) {
-                    // Update task
-                    UserAPI.updatePlace(taskId, {
-                      description: inputRef.current.value,
-                    }).then((response) => {
-                      // Update task state
-                      updatePlace(response!.data);
+          <PlaceRecommendationBadge data={isRecommended} />
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "totalFavorites",
+    header: "Favorites",
+    cell: ({ row }) => {
+      const totalFavorites = row.getValue("totalFavorites") as any;
 
-                      setCanEdit(false);
-                    });
-                  }
-                }}
-                className="cursor-pointer me-2"
-                color="gray"
-                size="16px"
-              />
-            )}
-            <PencilLine
-              onClick={() => setCanEdit((state) => !state)}
-              className="cursor-pointer"
-              color="gray"
-              size="16px"
-            />
-          </div>
+      return (
+        <div className="flex items-center gap-2 justify-between">
+          <p>{totalFavorites}</p>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "totalVisits",
+    header: "Visits",
+    cell: ({ row }) => {
+      const totalVisits = row.getValue("totalVisits") as any;
+
+      return (
+        <div className="flex items-center gap-2 justify-between">
+          <p>{totalVisits}</p>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "rating",
+    header: "Rating",
+    cell: ({ row }) => {
+      const rating = row.getValue("rating") as any;
+
+      return (
+        <div className="flex items-center gap-2 justify-between">
+          <p>{rating || 0}</p>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      const { setCurrentPlace } = usePlaceState();
+
+      return (
+        <div className="flex items-center gap-2">
+          <PlaceFormDialog
+            TriggerContent={
+              <Button
+                variant="link"
+                onClick={() => setCurrentPlace(row.original)}
+              >
+                View
+              </Button>
+            }
+          />
+          <PlaceFormDialog
+            TriggerContent={
+              <Button onClick={() => setCurrentPlace(row.original)}>
+                Edit
+              </Button>
+            }
+          />
+
+          <Button variant="destructive">Delete</Button>
         </div>
       );
     },

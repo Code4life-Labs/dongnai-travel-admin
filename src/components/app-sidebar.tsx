@@ -1,6 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "src/lib/utils";
-import { MessageCircleWarning, Newspaper, Earth } from "lucide-react";
+import {
+  MessageCircleWarning,
+  Newspaper,
+  Earth,
+  Image,
+  Users,
+} from "lucide-react";
 
 // Import components
 import { Avatar, AvatarFallback, AvatarImage } from "src/components/ui/avatar";
@@ -22,7 +28,7 @@ import { NavUser } from "./nav-user";
 import { AuthenticatedRoutesMetadata } from "src/routes/RootRoutes";
 
 // Menu items.
-const items = [
+const contentItems = [
   {
     url: "/places",
     icon: Earth,
@@ -32,6 +38,20 @@ const items = [
     icon: Newspaper,
   },
   {
+    url: "/users",
+    icon: Users,
+  },
+];
+
+const adsItems = [
+  {
+    url: "/banners",
+    icon: Image,
+  },
+];
+
+const otherItems = [
+  {
     url: "/reports",
     icon: MessageCircleWarning,
   },
@@ -40,8 +60,6 @@ const items = [
 export function AppSidebar() {
   const location = useLocation();
   const parts = location.pathname.split("/").filter((part) => part !== "");
-
-  console.log("Parts:", parts);
 
   return (
     <Sidebar collapsible="icon">
@@ -58,10 +76,56 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Accessibles</SidebarGroupLabel>
+          <SidebarGroupLabel>Content</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {contentItems.map((item) => (
+                <SidebarMenuItem
+                  className={cn({
+                    "bg-slate-100": parts.includes(item.url.slice(1)),
+                  })}
+                  key={AuthenticatedRoutesMetadata.get(item.url)}
+                >
+                  <SidebarMenuButton asChild>
+                    <Link to={item.url}>
+                      <item.icon />
+                      <span>{AuthenticatedRoutesMetadata.get(item.url)}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Advertisement</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {adsItems.map((item) => (
+                <SidebarMenuItem
+                  className={cn({
+                    "bg-slate-100": parts.includes(item.url.slice(1)),
+                  })}
+                  key={AuthenticatedRoutesMetadata.get(item.url)}
+                >
+                  <SidebarMenuButton asChild>
+                    <Link to={item.url}>
+                      <item.icon />
+                      <span>{AuthenticatedRoutesMetadata.get(item.url)}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Others</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {otherItems.map((item) => (
                 <SidebarMenuItem
                   className={cn({
                     "bg-slate-100": parts.includes(item.url.slice(1)),
