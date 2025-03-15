@@ -1,5 +1,5 @@
 // Import types
-import type { PlaceType } from "src/objects/place/types";
+import type { PlaceType, PlaceFormType } from "src/objects/place/types";
 
 export class PlaceUtils {
   /**
@@ -73,7 +73,37 @@ export class PlaceUtils {
     return result;
   }
 
-  static toFormData(place: PlaceType) {
+  static toModel(place: PlaceType) {
+    return {
+      _id: place._id || "",
+      name: place.name || "",
+      url: place.url || "",
+      placeId: place.placeId || "",
+      isRecommended: place.isRecommended || false,
+      content: place.content || "",
+      photos: place.photos || [],
+      geometry: {
+        location: {
+          lat: place.geometry?.location?.lat || 0,
+          lng: place.geometry?.location?.lng || 0,
+        },
+        viewport: {
+          northeast: {
+            lat: place.geometry?.viewport?.northeast?.lat || 0,
+            lng: place.geometry?.viewport?.northeast?.lng || 0,
+          },
+          southwest: {
+            lat: place.geometry?.viewport?.southwest?.lat || 0,
+            lng: place.geometry?.viewport?.southwest?.lng || 0,
+          },
+        },
+      },
+      addressComponents: place.addressComponents || [],
+      typeIds: place.types.map((type) => type._id) || [],
+    };
+  }
+
+  static toPreFormData(place: PlaceType) {
     return {
       name: place.name || "",
       url: place.url || "",
@@ -100,5 +130,81 @@ export class PlaceUtils {
       addressComponents: place.addressComponents || [],
       types: place.types || [],
     };
+  }
+
+  static toFormData(place: PlaceFormType): FormData {
+    const formData = new FormData();
+
+    formData.append("_id", place._id || "");
+    formData.append("name", place.name || "");
+    formData.append("url", place.url || "");
+    formData.append("placeId", place.placeId || "");
+    formData.append("isRecommended", String(place.isRecommended || false));
+    formData.append("content", place.content || "");
+
+    // Append photos as separate entries (assuming they are file objects or URLs)
+    if (place.photos && place.photos.length > 0) {
+      place.photos.forEach((photo) => {
+        formData.append(`photos`, photo);
+      });
+    }
+
+    if (place.deletePhotos && place.deletePhotos.length > 0) {
+      place.deletePhotos.forEach((photo) => {
+        formData.append(`deletePhotos`, photo);
+      });
+    }
+
+    if (place.newPhotos && place.newPhotos.length > 0) {
+      place.newPhotos.forEach((photo) => {
+        formData.append(`newPhotos`, photo);
+      });
+    }
+
+    // Append geometry fields
+    if (place.geometry) {
+      formData.append(
+        "geometry[location][lat]",
+        String(place.geometry.location?.lat || 0)
+      );
+      formData.append(
+        "geometry[location][lng]",
+        String(place.geometry.location?.lng || 0)
+      );
+
+      formData.append(
+        "geometry[viewport][northeast][lat]",
+        String(place.geometry.viewport?.northeast?.lat || 0)
+      );
+      formData.append(
+        "geometry[viewport][northeast][lng]",
+        String(place.geometry.viewport?.northeast?.lng || 0)
+      );
+
+      formData.append(
+        "geometry[viewport][southwest][lat]",
+        String(place.geometry.viewport?.southwest?.lat || 0)
+      );
+      formData.append(
+        "geometry[viewport][southwest][lng]",
+        String(place.geometry.viewport?.southwest?.lng || 0)
+      );
+    }
+
+    // Append addressComponents as separate entries
+    if (place.addressComponents && place.addressComponents.length > 0) {
+      place.addressComponents.forEach((component) => {
+        formData.append(`addressComponents`, JSON.stringify(component));
+      });
+    }
+
+    // Append typeIds
+    if (place.types && place.types.length > 0) {
+      place.types.forEach((type) => {
+        formData.append(`typeIds`, type._id);
+      });
+    }
+
+    return formData;
   }
 }

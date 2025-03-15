@@ -214,18 +214,13 @@ export class UserAPI {
    * @param place
    * @returns
    */
-  static async createPlace(place: PlaceModelType) {
+  static async createPlace(place: FormData) {
     try {
-      const user = UserAPI.getLocalUser();
-      const response = await api.post<CreatePlaceType, PlaceType>(
-        `/users/${user._id}/place`,
-        { place },
-        {
-          headers: {
-            Authorization: API.generateBearerToken(API.getToken()) as string,
-          },
-        }
-      );
+      const response = await api.post<FormData, PlaceType>(`/place`, place, {
+        headers: {
+          Authorization: API.generateBearerToken(API.getToken()) as string,
+        },
+      });
       return response.data;
     } catch (error) {
       console.error("UserAPI - Create place:", error);
@@ -239,12 +234,11 @@ export class UserAPI {
    * @param place
    * @returns
    */
-  static async updatePlace(id: string, place: Partial<PlaceModelType>) {
+  static async updatePlace(id: string, place: FormData) {
     try {
-      const user = UserAPI.getLocalUser();
-      const response = await api.patch<UpdatePlaceType, PlaceType>(
-        `/users/${user._id}/places/${id}`,
-        { place },
+      const response = await api.patch<FormData, PlaceType>(
+        `/places/${id}`,
+        place,
         {
           headers: {
             Authorization: API.generateBearerToken(API.getToken()) as string,

@@ -45,40 +45,8 @@ import { usePlaceState } from "src/states/place";
 import { PlaceUtils } from "src/objects/place/utils";
 import { Badge } from "src/components/ui/badge";
 
-type AddressComponent = {
-  longName: string;
-  shortName: string;
-  types: string[];
-};
-
-type Viewport = {
-  northeast: {
-    lat: number;
-    lng: number;
-  };
-  southwest: {
-    lat: number;
-    lng: number;
-  };
-};
-
-type PlaceFormValues = {
-  name: string;
-  url: string;
-  placeId: string;
-  isRecommended: boolean;
-  content: string;
-  photos: string[];
-  geometry: {
-    location: {
-      lat: number;
-      lng: number;
-    };
-    viewport: Viewport;
-  };
-  addressComponents: AddressComponent[];
-  types: any[];
-};
+// Import types
+import { PlaceFormType } from "src/objects/place/types";
 
 type PlaceFormDialogProps = {
   TriggerContent: (() => JSX.Element) | JSX.Element;
@@ -100,9 +68,9 @@ export default function PlaceFormDialog({
   const [isOpen, setIsOpen] = React.useState(false);
   const [uploadingImage, setUploadingImage] = React.useState(false);
 
-  const form = useForm<PlaceFormValues>({
+  const form = useForm<PlaceFormType>({
     defaultValues: currentPlace
-      ? PlaceUtils.toFormData(currentPlace)
+      ? PlaceUtils.toPreFormData(currentPlace)
       : {
           name: "",
           url: "",
@@ -130,20 +98,26 @@ export default function PlaceFormDialog({
         },
   });
 
-  const onSubmit: SubmitHandler<PlaceFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<PlaceFormType> = async (data) => {
     if (!user) return;
     updateIsResponding(true);
 
     try {
       let response;
-      console.log("Place Data:", data);
-      // if (currentPlace) {
-      //   response = await UserAPI.updatePlace(currentPlace._id, data);
-      //   if (response) updatePlace(response.data);
-      // } else {
-      //   response = await UserAPI.createPlace(data as any);
-      //   if (response) addPlace(response.data);
-      // }
+
+      if (currentPlace) {
+        data._id = currentPlace!._id;
+        response = await UserAPI.updatePlace(
+          currentPlace._id,
+          PlaceUtils.toFormData(data as any)
+        );
+        if (response) updatePlace(response.data);
+      } else {
+        response = await UserAPI.createPlace(
+          PlaceUtils.toFormData(data as any)
+        );
+        if (response) addPlace(response.data);
+      }
       setIsOpen(false);
     } finally {
       updateIsResponding(false);
@@ -160,13 +134,16 @@ export default function PlaceFormDialog({
     try {
       const file = event.target.files[0];
       // Assuming you have an upload function in your API
-      const response = await (UserAPI as any).uploadImage(file);
 
-      if (response && response.data && response.data.url) {
+      if (file) {
         // Get current photos array
         const currentPhotos = form.getValues("photos") || [];
+        const _newPhotos = form.getValues("newPhotos");
         // Add new photo URL to the array
-        form.setValue("photos", [...currentPhotos, response.data.url]);
+        form.setValue("photos", [...currentPhotos, URL.createObjectURL(file)]);
+        if (_newPhotos) {
+          form.setValue("newPhotos", [..._newPhotos, file]);
+        }
       }
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -180,7 +157,13 @@ export default function PlaceFormDialog({
 
   const removePhoto = (index: number) => {
     const currentPhotos = [...form.getValues("photos")];
-    currentPhotos.splice(index, 1);
+    const _deletePhotos = form.getValues("deletePhotos");
+    const deletePhotos = currentPhotos.splice(index, 1);
+
+    if (_deletePhotos) {
+      form.setValue("deletePhotos", [..._deletePhotos, ...deletePhotos]);
+    }
+
     form.setValue("photos", currentPhotos);
   };
 
@@ -196,7 +179,7 @@ export default function PlaceFormDialog({
       UserAPI.getPlace(currentPlace._id).then((result) => {
         currentPlace.content = result?.data.content;
         setCurrentPlace(currentPlace);
-        form.reset(PlaceUtils.toFormData(currentPlace));
+        form.reset(PlaceUtils.toPreFormData(currentPlace));
       });
     }
   }, [currentPlace, isOpen]);
