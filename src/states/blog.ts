@@ -5,12 +5,14 @@ import { OtherUtils } from "src/utils/other";
 
 // Import types
 import type { BlogType, BlogStatusType } from "src/objects/blog/types";
+import type { VNRecordType } from "src/types/general";
 
 type BlogState = {
   currentBlog: BlogType | null;
   blogs: Array<BlogType> | null;
   blogsByStatus: Map<string, Array<BlogType> | null> | null;
   blogStatuses: Array<BlogStatusType> | null;
+  blogTypes: Array<VNRecordType> | null;
   isResponding: boolean;
 };
 
@@ -18,6 +20,7 @@ type BlogActions = {
   // For blog
   setCurrentBlog(blog: BlogType | null): void;
   setBlogs(blogs: Array<BlogType> | null): void;
+  setBlogTypes(blogTypes: Array<VNRecordType> | null): void;
   addBlogs(blogs: Array<BlogType> | null): void;
   addBlog(blog: BlogType): void;
   addBlogToGroup(groupName: string, blog: BlogType | string): void;
@@ -134,8 +137,7 @@ const initialState = {
   blogs: null,
   blogsByStatus: null,
   blogStatuses: null,
-  blogPriorities: null,
-  blogSizes: null,
+  blogTypes: null,
   isResponding: false,
 };
 
@@ -168,6 +170,12 @@ export const useBlogState = create<BlogState & BlogActions>((set) => {
           addBlogsToGroup(state.blogsByStatus, blogs);
 
         return { ...state, blogs: blogs, blogsByStatus: state.blogsByStatus };
+      });
+    },
+
+    setBlogTypes(blogTypes) {
+      set((state) => {
+        return { ...state, blogTypes };
       });
     },
 

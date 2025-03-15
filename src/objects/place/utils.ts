@@ -73,7 +73,7 @@ export class PlaceUtils {
     return result;
   }
 
-  static toModel(place: PlaceType) {
+  static toFormData(place: PlaceType) {
     return {
       name: place.name || "",
       url: place.url || "",
@@ -98,7 +98,7 @@ export class PlaceUtils {
         },
       },
       addressComponents: place.addressComponents || [],
-      typeIds: place.types.map((type) => type._id) || [],
+      types: place.types || [],
     };
   }
 }

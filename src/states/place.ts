@@ -5,10 +5,12 @@ import { OtherUtils } from "src/utils/other";
 
 // Import types
 import type { PlaceType } from "src/objects/place/types";
+import type { VNRecordType } from "src/types/general";
 
 type PlaceState = {
   currentPlace: PlaceType | null;
   places: Array<PlaceType> | null;
+  placeTypes: Array<VNRecordType> | null;
   isResponding: boolean;
 };
 
@@ -16,6 +18,7 @@ type PlaceActions = {
   // For place
   setCurrentPlace(place: PlaceType | null): void;
   setPlaces(places: Array<PlaceType> | null): void;
+  setPlaceTypes(placeTypes: Array<VNRecordType> | null): void;
   addPlaces(places: Array<PlaceType> | null): void;
   addPlace(place: PlaceType): void;
   updatePlace(place: PlaceType): void;
@@ -53,10 +56,7 @@ function deletePlaceFromList(
 const initialState = {
   currentPlace: null,
   places: null,
-  placesByStatus: null,
-  placeStatuses: null,
-  placePriorities: null,
-  placeSizes: null,
+  placeTypes: null,
   isResponding: false,
 };
 
@@ -76,6 +76,12 @@ export const usePlaceState = create<PlaceState & PlaceActions>((set) => {
     setPlaces(places) {
       set((state) => {
         return { ...state, places: places };
+      });
+    },
+
+    setPlaceTypes(placeTypes) {
+      set((state) => {
+        return { ...state, placeTypes };
       });
     },
 

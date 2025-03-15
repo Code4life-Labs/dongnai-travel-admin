@@ -7,17 +7,17 @@ const api = new API({
   baseURL: import.meta.env.VITE_TASK_API_ENDPOINT,
 });
 
-export class BlogAPI {
+export class PlaceAPI {
   /**
    * Get statuses of tasks
    * @returns
    */
-  static async getBlogTypes() {
+  static async getPlaceTypes() {
     try {
-      const response = await api.get<Array<VNRecordType>>(`/blogs/types`);
+      const response = await api.get<Array<VNRecordType>>(`/places/types`);
       return response.data;
     } catch (error) {
-      console.error("BlogAPI - Get blogs' types:", error);
+      console.error("PlaceAPI - Get places' types:", error);
       return;
     }
   }

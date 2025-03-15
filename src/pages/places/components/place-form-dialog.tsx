@@ -12,6 +12,7 @@ import {
   FormItem,
   FormMessage,
 } from "src/components/ui/form";
+import { Textarea } from "src/components/ui/textarea";
 import { Input } from "src/components/ui/input";
 import { Button } from "src/components/ui/button";
 import {
@@ -22,16 +23,27 @@ import {
   DialogTitle,
 } from "src/components/ui/dialog";
 import { Checkbox } from "src/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "src/components/ui/select";
 
 // Import hooks
 import { useAuth } from "src/hooks/use-auth";
+
+// Import objects
 import { UserAPI } from "src/objects/user/api";
+import { PlaceAPI } from "src/objects/place/api";
 
 // Import state
 import { usePlaceState } from "src/states/place";
 
 // Import utils
 import { PlaceUtils } from "src/objects/place/utils";
+import { Badge } from "src/components/ui/badge";
 
 type AddressComponent = {
   longName: string;
@@ -65,7 +77,7 @@ type PlaceFormValues = {
     viewport: Viewport;
   };
   addressComponents: AddressComponent[];
-  typeIds: string[];
+  types: any[];
 };
 
 type PlaceFormDialogProps = {
@@ -77,7 +89,9 @@ export default function PlaceFormDialog({
 }: PlaceFormDialogProps) {
   const {
     currentPlace,
+    placeTypes,
     isResponding,
+    setCurrentPlace,
     addPlace,
     updatePlace,
     updateIsResponding,
@@ -88,7 +102,7 @@ export default function PlaceFormDialog({
 
   const form = useForm<PlaceFormValues>({
     defaultValues: currentPlace
-      ? PlaceUtils.toModel(currentPlace)
+      ? PlaceUtils.toFormData(currentPlace)
       : {
           name: "",
           url: "",
@@ -112,7 +126,7 @@ export default function PlaceFormDialog({
             },
           },
           addressComponents: [],
-          typeIds: [],
+          types: [],
         },
   });
 
@@ -122,13 +136,14 @@ export default function PlaceFormDialog({
 
     try {
       let response;
-      if (currentPlace) {
-        response = await UserAPI.updatePlace(currentPlace._id, data);
-        if (response) updatePlace(response.data);
-      } else {
-        response = await UserAPI.createPlace(data as any);
-        if (response) addPlace(response.data);
-      }
+      console.log("Place Data:", data);
+      // if (currentPlace) {
+      //   response = await UserAPI.updatePlace(currentPlace._id, data);
+      //   if (response) updatePlace(response.data);
+      // } else {
+      //   response = await UserAPI.createPlace(data as any);
+      //   if (response) addPlace(response.data);
+      // }
       setIsOpen(false);
     } finally {
       updateIsResponding(false);
@@ -169,12 +184,26 @@ export default function PlaceFormDialog({
     form.setValue("photos", currentPhotos);
   };
 
+  const removeType = (index: number) => {
+    const currentTypes = [...form.getValues("types")];
+    currentTypes.splice(index, 1);
+    form.setValue("types", currentTypes);
+  };
+
   React.useEffect(() => {
-    if (currentPlace) form.reset(PlaceUtils.toModel(currentPlace));
+    if (currentPlace) {
+      // Get content for place
+      UserAPI.getPlace(currentPlace._id).then((result) => {
+        currentPlace.content = result?.data.content;
+        setCurrentPlace(currentPlace);
+        form.reset(PlaceUtils.toFormData(currentPlace));
+      });
+    }
   }, [currentPlace, isOpen]);
 
   // Get photos from form
   const photos = form.watch("photos") || [];
+  const types = form.watch("types") || [];
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -247,6 +276,25 @@ export default function PlaceFormDialog({
                       placeholder="https://maps.google.com/?cid=..."
                       {...field}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Description of place..."
+                      className="min-h-[240px]"
+                    >
+                      {field.value}
+                    </Textarea>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -394,22 +442,58 @@ export default function PlaceFormDialog({
             {/* Type IDs */}
             <FormField
               control={form.control}
-              name="typeIds"
+              name="types"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Type IDs</FormLabel>
+                  <FormLabel>Types of place</FormLabel>
+                  <div className="w-full flex items-center gap-3">
+                    {types.length > 0 &&
+                      types.map((type, index) => {
+                        return (
+                          <Badge
+                            variant="outline"
+                            className="relative px-3 py-2 flex items-center"
+                            key={type._id}
+                          >
+                            {type.name}
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className="p-0 w-5 h-5 ms-3 aspect-square rounded-bl-md"
+                              onClick={() => removeType(index)}
+                            >
+                              <X size={12} />
+                            </Button>
+                          </Badge>
+                        );
+                      })}
+                  </div>
                   <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="Comma-separated type IDs (e.g. id-1,id-02)"
-                      value={field.value?.join(",")}
-                      onChange={(e) => {
-                        const typeIds = e.target.value
-                          ? e.target.value.split(",")
-                          : [];
-                        field.onChange(typeIds);
+                    <Select
+                      onValueChange={(value) => {
+                        const newSelectedTypes = [...form.getValues("types")];
+                        newSelectedTypes.push(
+                          placeTypes!.find((type) => type._id === value)
+                        );
+                        field.onChange(newSelectedTypes);
                       }}
-                    />
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choose types for place..." />
+                      </SelectTrigger>
+                      <SelectContent className="min-w-0 w-full">
+                        {placeTypes?.map((placeType) => {
+                          return (
+                            <SelectItem
+                              key={placeType._id}
+                              value={placeType._id}
+                            >
+                              {placeType.name}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
