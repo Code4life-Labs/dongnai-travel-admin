@@ -2,9 +2,9 @@ import React from "react";
 import { CircleAlert, Moon } from "lucide-react";
 
 // Import components
+import ViewBlogDialog from "./components/view-blog-dialog";
 import BoardView from "./components/board-view";
 import { Button } from "src/components/ui/button";
-import { Progress } from "src/components/ui/progress";
 
 // Import objects
 import { UserAPI } from "src/objects/user/api";
@@ -13,7 +13,7 @@ import { UserAPI } from "src/objects/user/api";
 import { useBlogState } from "src/states/blog";
 
 export default function BlogsPage() {
-  const { blogs, blogsByStatus, setBlogs, clearBlogs } = useBlogState();
+  const { setBlogs, clearBlogs } = useBlogState();
 
   React.useEffect(() => {
     // Fetch some values
@@ -57,6 +57,7 @@ export default function BlogsPage() {
       <hr className="my-3" />
       <section className="flex flex-1 overflow-hidden">
         <BoardView />
+        <ViewBlogDialog />
       </section>
     </div>
   );

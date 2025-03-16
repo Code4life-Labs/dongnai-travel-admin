@@ -14,6 +14,9 @@ import {
 // Import hooks
 import { useBlogState } from "src/states/blog";
 
+// Import states
+import { useViewBlogDialogState } from "src/states/dialogs/view-blog-dialog";
+
 // Import objects
 import { UserAPI } from "src/objects/user/api";
 
@@ -28,6 +31,7 @@ type BlogCardProps = {
 };
 
 export default function BoardViewBlogCard({ data }: BlogCardProps) {
+  const { open } = useViewBlogDialogState();
   const { setCurrentBlog, deteteBlog } = useBlogState();
   const draggableCardRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -55,16 +59,15 @@ export default function BoardViewBlogCard({ data }: BlogCardProps) {
 
       {/* Blog Info */}
       <section className="flex-1">
-        <BlogFormDialog
-          TriggerContent={
-            <header
-              onClick={() => setCurrentBlog(data)}
-              className="text-left cursor-pointer hover:underline"
-            >
-              <h3 className="font-bold">{data.name}</h3>
-            </header>
-          }
-        />
+        <header
+          onClick={() => {
+            open();
+            setCurrentBlog(data);
+          }}
+          className="text-left cursor-pointer hover:underline"
+        >
+          <h3 className="font-bold">{data.name}</h3>
+        </header>
 
         {/* Meta Info */}
         <div className="text-sm text-gray-500 mt-1 flex items-center gap-2">

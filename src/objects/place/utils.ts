@@ -80,7 +80,7 @@ export class PlaceUtils {
       url: place.url || "",
       placeId: place.placeId || "",
       isRecommended: place.isRecommended || false,
-      content: place.content || "",
+      description: place.description || "",
       photos: place.photos || [],
       geometry: {
         location: {
@@ -109,7 +109,7 @@ export class PlaceUtils {
       url: place.url || "",
       placeId: place.placeId || "",
       isRecommended: place.isRecommended || false,
-      content: place.content || "",
+      description: place.description || "",
       photos: place.photos || [],
       geometry: {
         location: {
@@ -140,15 +140,9 @@ export class PlaceUtils {
     formData.append("url", place.url || "");
     formData.append("placeId", place.placeId || "");
     formData.append("isRecommended", String(place.isRecommended || false));
-    formData.append("content", place.content || "");
+    formData.append("description", place.description || "");
 
-    // Append photos as separate entries (assuming they are file objects or URLs)
-    if (place.photos && place.photos.length > 0) {
-      place.photos.forEach((photo) => {
-        formData.append(`photos`, photo);
-      });
-    }
-
+    // Append deletedPhotos, newPhotos as separate entries (assuming they are file objects or URLs)
     if (place.deletePhotos && place.deletePhotos.length > 0) {
       place.deletePhotos.forEach((photo) => {
         formData.append(`deletePhotos`, photo);

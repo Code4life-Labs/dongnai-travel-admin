@@ -9,9 +9,9 @@ export type BlogModelType = {
   typeId: string;
   mentionedPlaceIds: Array<string>;
   name: string;
-  content: string;
+  content?: string;
   coverImage: string;
-  images: Array<string>;
+  images?: Array<string>;
   readTime: number;
   isApproved: boolean;
   createdAt: number;

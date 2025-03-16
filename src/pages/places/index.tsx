@@ -4,7 +4,8 @@ import { CircleAlert, Moon } from "lucide-react";
 // Import components
 import TableView from "./components/table-view";
 import { Button } from "src/components/ui/button";
-import { Progress } from "src/components/ui/progress";
+import PlaceFormDialog from "./components/place-form-dialog";
+import ViewPlaceDialog from "./components/view-place-dialog";
 
 // Import objects
 import { UserAPI } from "src/objects/user/api";
@@ -53,6 +54,8 @@ export default function PlacesPage() {
       <hr className="my-3" />
       <section className="flex flex-1 overflow-hidden">
         <TableView />
+        <PlaceFormDialog />
+        <ViewPlaceDialog />
       </section>
     </div>
   );

@@ -1,3 +1,5 @@
+import React from "react";
+
 import { API } from "src/api";
 
 // Import utils
@@ -114,7 +116,7 @@ export class UserAPI {
       );
       return response.data;
     } catch (error) {
-      console.error("UserAPI - Create blog:", error);
+      API.toastHTTPError(error);
       return;
     }
   }
@@ -139,7 +141,7 @@ export class UserAPI {
       );
       return response.data;
     } catch (error) {
-      console.error("UserAPI - Update blog:", error);
+      API.toastHTTPError(error, "Update Blog");
       return;
     }
   }
@@ -162,7 +164,7 @@ export class UserAPI {
       );
       return response.data;
     } catch (error) {
-      console.error("UserAPI - Delete blog:", error);
+      API.toastHTTPError(error, "Delete Blog");
       return;
     }
   }
@@ -223,7 +225,7 @@ export class UserAPI {
       });
       return response.data;
     } catch (error) {
-      console.error("UserAPI - Create place:", error);
+      API.toastHTTPError(error, "Create Place");
       return;
     }
   }
@@ -247,7 +249,7 @@ export class UserAPI {
       );
       return response.data;
     } catch (error) {
-      console.error("UserAPI - Update place:", error);
+      API.toastHTTPError(error, "Update Place");
       return;
     }
   }
@@ -270,7 +272,7 @@ export class UserAPI {
       );
       return response.data;
     } catch (error) {
-      console.error("UserAPI - Delete place:", error);
+      API.toastHTTPError(error, "Delete Place");
       return;
     }
   }

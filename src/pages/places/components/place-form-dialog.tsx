@@ -33,6 +33,7 @@ import {
 
 // Import hooks
 import { useAuth } from "src/hooks/use-auth";
+import { usePlaceDialogState } from "src/states/dialogs/place-dialog";
 
 // Import objects
 import { UserAPI } from "src/objects/user/api";
@@ -48,13 +49,8 @@ import { Badge } from "src/components/ui/badge";
 // Import types
 import { PlaceFormType } from "src/objects/place/types";
 
-type PlaceFormDialogProps = {
-  TriggerContent: (() => JSX.Element) | JSX.Element;
-};
-
-export default function PlaceFormDialog({
-  TriggerContent,
-}: PlaceFormDialogProps) {
+export default function PlaceFormDialog() {
+  const { isOpen, close } = usePlaceDialogState();
   const {
     currentPlace,
     placeTypes,
@@ -65,7 +61,6 @@ export default function PlaceFormDialog({
     updateIsResponding,
   } = usePlaceState();
   const { user } = useAuth();
-  const [isOpen, setIsOpen] = React.useState(false);
   const [uploadingImage, setUploadingImage] = React.useState(false);
 
   const form = useForm<PlaceFormType>({
@@ -104,6 +99,7 @@ export default function PlaceFormDialog({
 
     try {
       let response;
+      console.log("Data:", data);
 
       if (currentPlace) {
         data._id = currentPlace!._id;
@@ -118,7 +114,7 @@ export default function PlaceFormDialog({
         );
         if (response) addPlace(response.data);
       }
-      setIsOpen(false);
+      close();
     } finally {
       updateIsResponding(false);
     }
@@ -175,9 +171,9 @@ export default function PlaceFormDialog({
 
   React.useEffect(() => {
     if (currentPlace) {
-      // Get content for place
+      // Get description for place
       UserAPI.getPlace(currentPlace._id).then((result) => {
-        currentPlace.content = result?.data.content;
+        currentPlace.description = result?.data.description;
         setCurrentPlace(currentPlace);
         form.reset(PlaceUtils.toPreFormData(currentPlace));
       });
@@ -189,14 +185,7 @@ export default function PlaceFormDialog({
   const types = form.watch("types") || [];
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger>
-        {typeof TriggerContent === "function" ? (
-          <TriggerContent />
-        ) : (
-          TriggerContent
-        )}
-      </DialogTrigger>
+    <Dialog open={isOpen} modal defaultOpen={isOpen} onOpenChange={close}>
       <DialogContent className="min-w-[720px] border-b border-b-2 pb-3 mb-6 max-h-[calc(100dvh-4rem)] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
@@ -267,7 +256,7 @@ export default function PlaceFormDialog({
 
             <FormField
               control={form.control}
-              name="content"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
@@ -275,6 +264,7 @@ export default function PlaceFormDialog({
                     <Textarea
                       placeholder="Description of place..."
                       className="min-h-[240px]"
+                      {...field}
                     >
                       {field.value}
                     </Textarea>
@@ -501,6 +491,81 @@ export default function PlaceFormDialog({
                       Should this place be recommended to users?
                     </p>
                   </div>
+                </FormItem>
+              )}
+            />
+
+            {/* Address Components Section */}
+            <FormField
+              control={form.control}
+              name="addressComponents"
+              render={({ field }) => (
+                <FormItem className="border p-3 rounded-md space-y-3">
+                  <FormLabel>Address Components</FormLabel>
+
+                  {field.value?.map((component, index) => (
+                    <div key={index} className="flex gap-2 items-center">
+                      <Input
+                        type="text"
+                        placeholder="Long Name"
+                        value={component.longName}
+                        onChange={(e) => {
+                          const updatedComponents = [...field.value];
+                          updatedComponents[index].longName = e.target.value;
+                          field.onChange(updatedComponents);
+                        }}
+                      />
+                      <Input
+                        type="text"
+                        placeholder="Short Name"
+                        value={component.shortName}
+                        onChange={(e) => {
+                          const updatedComponents = [...field.value];
+                          updatedComponents[index].shortName = e.target.value;
+                          field.onChange(updatedComponents);
+                        }}
+                      />
+                      <Input
+                        type="text"
+                        placeholder="Types (comma-separated)"
+                        value={component.types.join(",")}
+                        onChange={(e) => {
+                          const updatedComponents = [...field.value];
+                          updatedComponents[index].types =
+                            e.target.value.split(",");
+                          field.onChange(updatedComponents);
+                        }}
+                      />
+                      <Button
+                        variant="outline"
+                        className="p-1"
+                        onClick={() => {
+                          const updatedComponents = field.value.filter(
+                            (_, i) => i !== index
+                          );
+                          field.onChange(updatedComponents);
+                        }}
+                      >
+                        <X size={14} />
+                      </Button>
+                    </div>
+                  ))}
+
+                  {/* Add Address Component Button */}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      field.onChange([
+                        ...field.value,
+                        { longName: "", shortName: "", types: [] },
+                      ]);
+                    }}
+                  >
+                    Add Address Component
+                  </Button>
+
+                  <FormMessage />
                 </FormItem>
               )}
             />

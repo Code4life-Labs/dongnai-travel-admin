@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 // Import from utils
 import { CookieUtils } from "src/utils/cookies";
@@ -13,6 +14,7 @@ import type {
   AxiosResponse,
   AxiosInterceptorOptions,
 } from "axios";
+import React from "react";
 
 type _AxiosInterceptor = {
   request: AxiosInterceptorManager<InternalAxiosRequestConfig>;
@@ -57,6 +59,22 @@ export class API {
     const result = `Bearer ${token}`;
     if (isHTTPHeader) return { Authorization: result };
     return result;
+  }
+
+  static toastHTTPError(error: any, prefix?: string) {
+    if (error instanceof AxiosError) {
+      const responseData = error.response?.data;
+      if (prefix)
+        toast.error(`${prefix}: ${responseData.message}`, {
+          position: "top-center",
+          autoClose: 5000,
+        });
+      else
+        toast.error(responseData.message, {
+          position: "top-center",
+          autoClose: 5000,
+        });
+    }
   }
 
   /**

@@ -6,7 +6,6 @@ import { UserAPI } from "src/objects/user/api";
 import { BlogUtils } from "src/objects/blog/utils";
 
 // Import components
-import TaskFormDialog from "../../places/components/place-form-dialog";
 import BoardViewTaskCard from "./board-view-blog-card";
 import { Button } from "src/components/ui/button";
 
@@ -43,10 +42,6 @@ export default function BoardView() {
   const columnRefs = React.useRef<Map<string, HTMLDivElement | null>>(
     new Map()
   );
-
-  React.useEffect(() => {
-    console.log("Blog by status:", blogsByStatus);
-  }, []);
 
   return (
     <div className="relative w-full flex flex-1 border p-2 bg-secondary rounded-lg overflow-x-auto">

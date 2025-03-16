@@ -1,16 +1,13 @@
-import React from "react";
 import { ColumnDef } from "@tanstack/react-table";
 
 // Import components
-import PlaceFormDialog from "./place-form-dialog";
 import { PlaceRecommendationBadge } from "./place-attribute-badges";
 import { Button } from "src/components/ui/button";
 
-// Import objects
-import { UserAPI } from "src/objects/user/api";
-
 // Import states
 import { usePlaceState } from "src/states/place";
+import { usePlaceDialogState } from "src/states/dialogs/place-dialog";
+import { useViewPlaceDialogState } from "src/states/dialogs/view-place-dialog";
 
 // Import types
 import type { PlaceType } from "src/objects/place/types";
@@ -90,26 +87,28 @@ export const taskColumns: ColumnDef<PlaceType>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const { setCurrentPlace } = usePlaceState();
+      const { open: openViewPlace } = useViewPlaceDialogState();
+      const { open } = usePlaceDialogState();
 
       return (
         <div className="flex items-center gap-2">
-          <PlaceFormDialog
-            TriggerContent={
-              <Button
-                variant="link"
-                onClick={() => setCurrentPlace(row.original)}
-              >
-                View
-              </Button>
-            }
-          />
-          <PlaceFormDialog
-            TriggerContent={
-              <Button onClick={() => setCurrentPlace(row.original)}>
-                Edit
-              </Button>
-            }
-          />
+          <Button
+            variant="link"
+            onClick={() => {
+              openViewPlace();
+              setCurrentPlace(row.original);
+            }}
+          >
+            View
+          </Button>
+          <Button
+            onClick={() => {
+              open();
+              setCurrentPlace(row.original);
+            }}
+          >
+            Edit
+          </Button>
 
           <Button variant="destructive">Delete</Button>
         </div>
