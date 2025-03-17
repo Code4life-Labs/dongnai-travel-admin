@@ -56,6 +56,29 @@ export class UserAPI {
   }
 
   /**
+   * Get isers
+   * @returns
+   */
+  static async getUsers(params?: Record<string, any>) {
+    if (!params) params = {};
+    if (!params.limit) params.limit = 10;
+    if (!params.skip) params.skip = 0;
+
+    try {
+      const paramsStr = new URLSearchParams(params);
+      const response = await api.get<Array<UserType>>(`users?${paramsStr}`, {
+        headers: {
+          Authorization: API.generateBearerToken(API.getToken()) as string,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("UserAPI - Get users:", error);
+      return;
+    }
+  }
+
+  /**
    * Get blogs of a user
    * @returns
    */
@@ -132,6 +155,31 @@ export class UserAPI {
       const user = UserAPI.getLocalUser();
       const response = await api.patch<Partial<BlogModelType>, BlogType>(
         `/users/${user._id}/blogs/${id}`,
+        blog,
+        {
+          headers: {
+            Authorization: API.generateBearerToken(API.getToken()) as string,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      API.toastHTTPError(error, "Update Blog");
+      return;
+    }
+  }
+
+  /**
+   * Update a blog metadata of user
+   * @param id
+   * @param blog
+   * @returns
+   */
+  static async updateBlogMetadata(id: string, blog: Partial<BlogModelType>) {
+    try {
+      const user = UserAPI.getLocalUser();
+      const response = await api.patch<Partial<BlogModelType>, BlogType>(
+        `/users/${user._id}/blogs/${id}/metadata`,
         blog,
         {
           headers: {

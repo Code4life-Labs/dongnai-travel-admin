@@ -78,7 +78,7 @@ export default function BoardView() {
                     const taskId = e.dataTransfer.getData("taskId");
 
                     // Update state: move task to order group
-                    UserAPI.updateBlog(taskId, {
+                    UserAPI.updateBlogMetadata(taskId, {
                       isApproved: status.value === "verified" ? true : false,
                     }).then((response) => {
                       if (response?.data) updateBlog(response?.data);

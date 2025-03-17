@@ -15,6 +15,7 @@ import DashboardLayout from "src/layouts/dashboard";
 import AuthPage from "src/pages/auth";
 import PlacesPage from "src/pages/places";
 import BlogsPage from "src/pages/blogs";
+import UsersPage from "src/pages/users";
 
 // Import utils
 import { CookieUtils } from "src/utils/cookies";
@@ -71,7 +72,7 @@ const authenticatedRoutes: Array<RouteObject> = [
       },
       {
         path: "/users",
-        element: <div className="w-full flex-1">Users Page</div>,
+        element: <UsersPage />,
       },
       {
         path: "/banners",

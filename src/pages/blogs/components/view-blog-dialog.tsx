@@ -10,6 +10,9 @@ import {
 import { Badge } from "src/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "src/components/ui/avatar";
 
+// Import components
+import MDContent from "src/components/markdown";
+
 // Import hooks
 import { useAuth } from "src/hooks/use-auth";
 import { useViewBlogDialogState } from "src/states/dialogs/view-blog-dialog";
@@ -136,14 +139,13 @@ export default function ViewBlogDialog() {
 
         {/* Content */}
         <div className="max-w-full">
-          <h3 className="text-lg font-medium">Content</h3>
-          <p className="text-gray-700 whitespace-pre-line">
+          <MDContent>
             {currentBlog ? currentBlog.content : "Loading..."}
-          </p>
+          </MDContent>
         </div>
 
         {/* Additional Images */}
-        <div>
+        <div className="mb-3">
           <h3 className="text-lg font-medium">Gallery</h3>
           <div className="flex gap-2 overflow-x-auto">
             {currentBlog &&
