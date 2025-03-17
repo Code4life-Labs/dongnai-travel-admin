@@ -9,6 +9,7 @@ import type { VNRecordType } from "src/types/general";
 
 type UserState = {
   currentUser: UserType | null;
+  currentViewUser: UserType | null;
   users: Array<UserType> | null;
   userTypes: Array<VNRecordType> | null;
   isResponding: boolean;
@@ -17,6 +18,7 @@ type UserState = {
 type UserActions = {
   // For user
   setCurrentUser(user: UserType | null): void;
+  setCurrentViewUser(user: UserType | null): void;
   setUsers(users: Array<UserType> | null): void;
   setUserTypes(userTypes: Array<VNRecordType> | null): void;
   addUsers(users: Array<UserType> | null): void;
@@ -53,6 +55,7 @@ function deleteUserFromList(list: Array<UserType>, user: UserType | string) {
 const initialState = {
   currentUser: null,
   users: null,
+  currentViewUser: null,
   userTypes: null,
   isResponding: false,
 };
@@ -67,6 +70,12 @@ export const useUserState = create<UserState & UserActions>((set) => {
     setCurrentUser(user) {
       set((state) => {
         return { ...state, currentUser: user };
+      });
+    },
+
+    setCurrentViewUser(user) {
+      set((state) => {
+        return { ...state, currentViewUser: user };
       });
     },
 

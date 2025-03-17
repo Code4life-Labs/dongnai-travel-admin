@@ -44,7 +44,7 @@ export default function BoardView() {
   );
 
   return (
-    <div className="relative w-full flex flex-1 border p-2 bg-secondary rounded-lg overflow-x-auto">
+    <>
       <div className="flex justify-between gap-3 flex-1">
         {blogsByStatus === null ? (
           <p>Loading...</p>
@@ -138,6 +138,6 @@ export default function BoardView() {
             })
         )}
       </div>
-    </div>
+    </>
   );
 }

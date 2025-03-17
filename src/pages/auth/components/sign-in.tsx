@@ -30,7 +30,7 @@ export default function Signin() {
     <div className="w-full max-w-[480px] bg-white p-6 rounded-lg border border-blue-700">
       <header>
         <h1 className="font-bold text-4xl">Sign in</h1>
-        <p>Welcome back to DongNaiTravel Admin!</p>
+        <p>Welcome back to DongNaiTravel Admin Dashboard!</p>
       </header>
       <hr className="my-3" />
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
@@ -75,7 +75,7 @@ export default function Signin() {
                 <span className="ms-3">Wait a few seconds...</span>
               </div>
             ) : (
-              "Let me in"
+              "Sign in"
             )}
           </Button>
           <p className="text-sm">

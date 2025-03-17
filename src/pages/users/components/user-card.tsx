@@ -5,6 +5,10 @@ import { Avatar, AvatarImage, AvatarFallback } from "src/components/ui/avatar";
 import { Button } from "src/components/ui/button";
 import { UserVerificationBadge } from "./user-attribute-badges";
 
+// Import hooks
+import { useUserState } from "src/states/user";
+import { useViewUserDialogState } from "src/states/dialogs/view-user-dialog";
+
 // Import utils
 import { UserUtils } from "src/objects/user/utils";
 import { DatetimeUtils } from "src/utils/datetime";
@@ -17,8 +21,17 @@ type UserCardProps = {
 };
 
 export default function UserCard(props: UserCardProps) {
+  const { open } = useViewUserDialogState();
+  const { setCurrentViewUser } = useUserState();
+
   return (
-    <div className="relative grid grid-cols-12 cursor-grab bg-white shadow w-full items-center px-3 py-2 rounded-lg border mb-3">
+    <div
+      onClick={() => {
+        open();
+        setCurrentViewUser(props.data);
+      }}
+      className="relative grid grid-cols-12 cursor-grab bg-white shadow w-full items-center px-3 py-2 rounded-lg border mb-3"
+    >
       {/* Avatar */}
       <div className="me-3 col-span-1">
         <Avatar>

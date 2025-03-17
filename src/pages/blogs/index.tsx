@@ -2,6 +2,7 @@ import React from "react";
 import { CircleAlert, Moon } from "lucide-react";
 
 // Import components
+import MainDashboardView from "src/layouts/main-dashboard-view";
 import ViewBlogDialog from "./components/view-blog-dialog";
 import BoardView from "./components/board-view";
 import { Button } from "src/components/ui/button";
@@ -38,27 +39,9 @@ export default function BlogsPage() {
   }, []);
 
   return (
-    <div className="w-full h-[calc(100dvh-28px)] flex flex-col px-2 py-3">
-      <header className="flex justify-between items-center px-3">
-        <div className="w-1/4">
-          <h1 className="text-lg font-bold">Blogs</h1>
-        </div>
-        <div className="flex justify-end gap-2 w-3/4">
-          <Button variant="outline">
-            <CircleAlert />
-            Report
-          </Button>
-          <Button variant="outline" size="icon">
-            <Moon />
-          </Button>
-        </div>
-      </header>
-
-      <hr className="my-3" />
-      <section className="flex flex-1 overflow-hidden">
-        <BoardView />
-        <ViewBlogDialog />
-      </section>
-    </div>
+    <MainDashboardView title="Blogs">
+      <BoardView />
+      <ViewBlogDialog />
+    </MainDashboardView>
   );
 }

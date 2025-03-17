@@ -2,8 +2,10 @@ import React from "react";
 import { CircleAlert, Moon } from "lucide-react";
 
 // Import components
+import MainDashboardView from "src/layouts/main-dashboard-view";
 import { Button } from "src/components/ui/button";
-import UserListView from "./components/list-view";
+import UserListView from "./components/user-list-view";
+import ViewUserProfileDialog from "./components/view-user-dialog";
 
 // Import objects
 import { UserAPI } from "src/objects/user/api";
@@ -12,7 +14,7 @@ import { UserAPI } from "src/objects/user/api";
 import { useUserState } from "src/states/user";
 
 export default function UsersPage() {
-  const { users, setUsers, clearUsers } = useUserState();
+  const { setUsers, clearUsers } = useUserState();
 
   React.useEffect(() => {
     // Fetch some values
@@ -36,26 +38,9 @@ export default function UsersPage() {
   }, []);
 
   return (
-    <div className="w-full h-[calc(100dvh-28px)] flex flex-col px-2 py-3">
-      <header className="flex justify-between items-center px-3">
-        <div className="w-1/4">
-          <h1 className="text-lg font-bold">Users</h1>
-        </div>
-        <div className="flex justify-end gap-2 w-3/4">
-          <Button variant="outline">
-            <CircleAlert />
-            Report
-          </Button>
-          <Button variant="outline" size="icon">
-            <Moon />
-          </Button>
-        </div>
-      </header>
-
-      <hr className="my-3" />
-      <section className="flex flex-1 overflow-hidden">
-        <UserListView />
-      </section>
-    </div>
+    <MainDashboardView title="Users">
+      <UserListView />
+      <ViewUserProfileDialog />
+    </MainDashboardView>
   );
 }

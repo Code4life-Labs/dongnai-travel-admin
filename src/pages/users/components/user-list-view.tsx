@@ -8,7 +8,7 @@ export default function UserListView() {
   const { users } = useUserState();
 
   return (
-    <div className="w-full flex flex-col flex-1 border bg-secondary p-2 rounded-lg overflow-auto">
+    <>
       {users === null ? (
         <p>Loading...</p>
       ) : (
@@ -16,6 +16,6 @@ export default function UserListView() {
           return <UserCard key={user._id} data={user} />;
         })
       )}
-    </div>
+    </>
   );
 }

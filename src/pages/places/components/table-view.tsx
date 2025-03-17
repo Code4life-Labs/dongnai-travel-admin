@@ -9,12 +9,12 @@ export default function TableView() {
   const { places } = usePlaceState();
 
   return (
-    <div className="w-full flex flex-1 border bg-secondary rounded-lg overflow-auto">
+    <>
       {places === null ? (
         <p>Loading...</p>
       ) : (
         <TableViewDataTable columns={taskColumns} data={[...places]} />
       )}
-    </div>
+    </>
   );
 }
