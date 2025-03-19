@@ -1,22 +1,3 @@
-import { create } from "zustand";
+import { createDialogStateStore } from "./_base";
 
-// Import types
-import type { DialogState, DialogActions } from "./types";
-
-export const usePlaceDialogState = create<DialogState & DialogActions>(
-  function (set) {
-    return {
-      isOpen: false,
-      open() {
-        set({
-          isOpen: true,
-        });
-      },
-      close() {
-        set({
-          isOpen: false,
-        });
-      },
-    };
-  }
-);
+export const usePlaceDialogState = createDialogStateStore();

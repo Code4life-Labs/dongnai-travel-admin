@@ -36,8 +36,6 @@ export default function PlacesPage() {
   return (
     <MainDashboardView title="Places">
       <TableView />
-      <PlaceFormDialog />
-      <ViewPlaceDialog />
     </MainDashboardView>
   );
 }

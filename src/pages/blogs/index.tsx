@@ -41,7 +41,6 @@ export default function BlogsPage() {
   return (
     <MainDashboardView title="Blogs">
       <BoardView />
-      <ViewBlogDialog />
     </MainDashboardView>
   );
 }

@@ -27,7 +27,7 @@ type CreatePlaceType = {
 };
 
 const api = new API({
-  baseURL: import.meta.env.VITE_TASK_API_ENDPOINT,
+  baseURL: import.meta.env.VITE_API_ENDPOINT,
 });
 
 export class UserAPI {

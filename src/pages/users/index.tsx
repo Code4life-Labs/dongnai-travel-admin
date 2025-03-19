@@ -1,9 +1,7 @@
 import React from "react";
-import { CircleAlert, Moon } from "lucide-react";
 
 // Import components
 import MainDashboardView from "src/layouts/main-dashboard-view";
-import { Button } from "src/components/ui/button";
 import UserListView from "./components/user-list-view";
 import ViewUserProfileDialog from "./components/view-user-dialog";
 
@@ -40,7 +38,6 @@ export default function UsersPage() {
   return (
     <MainDashboardView title="Users">
       <UserListView />
-      <ViewUserProfileDialog />
     </MainDashboardView>
   );
 }

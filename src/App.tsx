@@ -6,14 +6,17 @@ import RootRoutes from "./routes/RootRoutes";
 // Import objects
 import { BlogAPI } from "./objects/blog/api";
 import { PlaceAPI } from "./objects/place/api";
+import { ReportAPI } from "./objects/report/api";
 
 // Import states
 import { useBlogState } from "./states/blog";
 import { usePlaceState } from "./states/place";
+import { useReportState } from "./states/report";
 
 function App() {
   const { setBlogStatuses, setBlogTypes } = useBlogState();
   const { setPlaceTypes } = usePlaceState();
+  const { setReportReasons, setReportStatuses } = useReportState();
 
   React.useEffect(() => {
     // Fetch some values
@@ -29,6 +32,8 @@ function App() {
       const promises = [
         PlaceAPI.getPlaceTypes(),
         BlogAPI.getBlogTypes(),
+        ReportAPI.getReportReasons(),
+        ReportAPI.getReportStatuses(),
         import("src/mock-data/statuses.json"),
       ];
 
@@ -36,10 +41,14 @@ function App() {
         const [
           placeTypesResponsePayload,
           blogTypesResponsePayload,
+          reportReasonsPayload,
+          reportStatusesPayload,
           blogStatuses,
         ] = values;
         setBlogStatuses((blogStatuses as any).default);
         setBlogTypes((blogTypesResponsePayload as any).data);
+        setReportReasons((reportReasonsPayload as any).data);
+        setReportStatuses((reportStatusesPayload as any).data);
         setPlaceTypes((placeTypesResponsePayload as any).data);
       });
     }

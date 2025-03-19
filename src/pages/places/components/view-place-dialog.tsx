@@ -1,18 +1,9 @@
 import React from "react";
 
 // Import components
-import LoadingSpinner from "src/components/loading-spinner";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormLabel,
-  FormItem,
-  FormMessage,
-} from "src/components/ui/form";
+
 import { Textarea } from "src/components/ui/textarea";
 import { Input } from "src/components/ui/input";
-import { Button } from "src/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -20,13 +11,6 @@ import {
   DialogTitle,
 } from "src/components/ui/dialog";
 import { Checkbox } from "src/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "src/components/ui/select";
 
 // Import hooks
 import { useAuth } from "src/hooks/use-auth";
@@ -49,13 +33,27 @@ export default function ViewPlaceDialog() {
 
   React.useEffect(() => {
     if (currentPlace) {
-      // Get description for place
+      // Get content for place
       UserAPI.getPlace(currentPlace._id).then((result) => {
-        currentPlace.description = result?.data.description;
+        currentPlace.content = result?.data.content;
+        if (!currentPlace.totalFavorites) {
+          currentPlace.totalFavorites = result?.data.totalFavorites!;
+        }
+        if (!currentPlace.totalReviews) {
+          currentPlace.totalReviews = result?.data.totalFavorites!;
+        }
+        if (!currentPlace.totalVisits) {
+          currentPlace.totalVisits = result?.data.totalFavorites!;
+        }
+        if (!currentPlace.rating) {
+          currentPlace.rating = result?.data.rating!;
+        }
         setCurrentPlace(currentPlace);
       });
     }
   }, [currentPlace, isOpen]);
+
+  console.log("Current Place:", currentPlace);
 
   return (
     <Dialog open={isOpen} modal defaultOpen={isOpen} onOpenChange={close}>
@@ -93,11 +91,32 @@ export default function ViewPlaceDialog() {
         {/* Description */}
         <div>
           <label className="font-medium">Description</label>
-          <Textarea
-            value={currentPlace ? currentPlace.description : "Loading..."}
-            disabled
-            className="min-h-[120px]"
-          />
+          {currentPlace && typeof currentPlace.content === "string" ? (
+            <Textarea
+              value={currentPlace ? currentPlace.content : "Loading..."}
+              disabled
+              className="min-h-[120px]"
+            />
+          ) : (
+            <>
+              <div>
+                <p className="font-bold">In Vietnamese</p>
+                <Textarea
+                  value={currentPlace ? currentPlace.content.vi : "Loading..."}
+                  disabled
+                  className="min-h-[120px]"
+                />
+              </div>
+              <div>
+                <p className="font-bold">In English</p>
+                <Textarea
+                  value={currentPlace ? currentPlace.content.en : "Loading..."}
+                  disabled
+                  className="min-h-[120px]"
+                />
+              </div>
+            </>
+          )}
         </div>
 
         <div className="border p-3 rounded-md">

@@ -30,7 +30,7 @@ export type PlaceModelType = {
     };
     viewport: Viewport;
   };
-  description?: string;
+  content?: string | any;
   phoneNumber: string;
   name: string;
   plusCode: any;
@@ -59,7 +59,7 @@ export type PlaceFormType = {
   url: string;
   placeId: string;
   isRecommended: boolean;
-  description: string;
+  content: string | any;
   photos: string[];
   newPhotos?: File[];
   deletePhotos?: string[];
