@@ -23,7 +23,6 @@ export default function ReportsPage() {
       // In production
       // Fetch data from server
       ReportAPI.getReports().then((result) => {
-        console.log("Reports:", result?.data!);
         setReports(result?.data!);
       });
     }

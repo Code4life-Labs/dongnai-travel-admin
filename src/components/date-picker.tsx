@@ -13,6 +13,7 @@ import {
   FormItem,
   FormControl,
   FormMessage,
+  FormLabel,
 } from "src/components/ui/form";
 
 // Import types
@@ -26,6 +27,7 @@ type DatePickerProps = {
 
 type DatePickerFormProps = {
   name: string;
+  label: string;
   form: UseFormReturn;
   TriggerContent: ({ fieldValue }: { fieldValue: any }) => JSX.Element;
 };
@@ -68,6 +70,7 @@ export function DatePicker(props: DatePickerProps) {
  */
 export function DatePickerForm({
   name,
+  label,
   form,
   TriggerContent,
 }: DatePickerFormProps) {
@@ -75,30 +78,40 @@ export function DatePickerForm({
     <FormField
       name={name}
       control={form.control}
-      render={({ field }) => (
-        <FormItem>
-          <PopoverDialog>
-            <PopoverDialogTrigger asChild>
-              <FormControl>
-                <Button variant="ghost">
-                  {TriggerContent && (
-                    <TriggerContent fieldValue={field.value} />
-                  )}
-                </Button>
-              </FormControl>
-            </PopoverDialogTrigger>
-            <PopoverDialogContent className="w-auto p-0" align="start">
-              <Calendar
-                initialFocus
-                mode="single"
-                selected={field.value}
-                onSelect={field.onChange}
-              />
-            </PopoverDialogContent>
-          </PopoverDialog>
-          <FormMessage />
-        </FormItem>
-      )}
+      render={({ field }) => {
+        console.log("Field:", field);
+
+        return (
+          <FormItem>
+            <FormLabel>{label}</FormLabel>
+            <PopoverDialog>
+              <PopoverDialogTrigger asChild>
+                <FormControl>
+                  <Button variant="ghost">
+                    {TriggerContent && (
+                      <TriggerContent fieldValue={field.value} />
+                    )}
+                  </Button>
+                </FormControl>
+              </PopoverDialogTrigger>
+              <PopoverDialogContent className="w-auto p-0" align="start">
+                <Calendar
+                  initialFocus
+                  mode="single"
+                  selected={
+                    typeof field.value !== "object"
+                      ? new Date(field.value)
+                      : field.value
+                  }
+                  onSelect={field.onChange}
+                  {...field}
+                />
+              </PopoverDialogContent>
+            </PopoverDialog>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
     />
   );
 }

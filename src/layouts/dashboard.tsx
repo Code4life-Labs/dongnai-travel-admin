@@ -6,6 +6,8 @@ import ViewUserProfileDialog from "src/pages/users/components/view-user-dialog";
 import ViewBlogDialog from "src/pages/blogs/components/view-blog-dialog";
 import ViewPlaceDialog from "src/pages/places/components/view-place-dialog";
 import PlaceFormDialog from "src/pages/places/components/place-form-dialog";
+import BannerFormDialog from "src/pages/banners/components/banner-form-dialog";
+import ViewBannerDialog from "src/pages/banners/components/view-banner-dialog";
 
 export default function DashboardLayout({
   children,
@@ -23,6 +25,8 @@ export default function DashboardLayout({
         <ViewBlogDialog />
         <ViewPlaceDialog />
         <PlaceFormDialog />
+        <BannerFormDialog />
+        <ViewBannerDialog />
       </main>
     </SidebarProvider>
   );

@@ -171,9 +171,9 @@ export default function PlaceFormDialog() {
 
   React.useEffect(() => {
     if (currentPlace) {
-      // Get description for place
+      // Get content for place
       UserAPI.getPlace(currentPlace._id).then((result) => {
-        currentPlace.description = result?.data.description;
+        currentPlace.content = result?.data.content;
         setCurrentPlace(currentPlace);
         form.reset(PlaceUtils.toPreFormData(currentPlace));
       });
@@ -256,7 +256,7 @@ export default function PlaceFormDialog() {
 
             <FormField
               control={form.control}
-              name="description"
+              name="content"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>

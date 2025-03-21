@@ -12,7 +12,7 @@ import { useViewPlaceDialogState } from "src/states/dialogs/view-place-dialog";
 // Import types
 import type { PlaceType } from "src/objects/place/types";
 
-export const taskColumns: ColumnDef<PlaceType>[] = [
+export const placeColumns: ColumnDef<PlaceType>[] = [
   {
     accessorKey: "_id",
     header: "id",

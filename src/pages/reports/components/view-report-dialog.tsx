@@ -12,13 +12,20 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "src/components/ui/avatar";
 import { Badge } from "src/components/ui/badge";
 
+// Import objects
+import { ReportAPI } from "src/objects/report/api";
+
 // Import hooks
 import { useReportState } from "src/states/report";
 import { useViewReportDialogState } from "src/states/dialogs/view-report-dialog";
 
 export default function ViewReportDialog() {
-  const { currentReport } = useReportState();
+  const { currentReport, reportStatuses, setCurrentReport } = useReportState();
   const { isOpen, close } = useViewReportDialogState();
+
+  const isReportResolve = currentReport
+    ? currentReport.status.value === "resolved"
+    : false;
 
   return (
     <Dialog open={isOpen} modal defaultOpen={isOpen} onOpenChange={close}>
@@ -168,8 +175,47 @@ export default function ViewReportDialog() {
             <div>
               <h3 className="font-semibold mb-1">Actions</h3>
               <div className="flex gap-3">
-                <Button className="w-full">Mark as reviewd</Button>
-                <Button className="w-full" variant="outline">
+                <Button
+                  disabled={isReportResolve}
+                  onClick={() => {
+                    if (reportStatuses) {
+                      const reviewedStatus = reportStatuses.find(
+                        (status) => status.value === "reviewed"
+                      )!;
+                      if (reviewedStatus.value !== currentReport.status.value) {
+                        ReportAPI.updateReportStatus(
+                          currentReport._id!,
+                          reviewedStatus
+                        ).then(() => {
+                          currentReport.status = { ...reviewedStatus };
+                          setCurrentReport(currentReport);
+                        });
+                      }
+                    }
+                  }}
+                  className="w-full"
+                >
+                  Mark as reviewd
+                </Button>
+                <Button
+                  disabled={isReportResolve}
+                  onClick={() => {
+                    if (reportStatuses) {
+                      const resolvedStatus = reportStatuses.find(
+                        (status) => status.value === "resolved"
+                      )!;
+                      ReportAPI.updateReportStatus(
+                        currentReport._id!,
+                        resolvedStatus
+                      ).then(() => {
+                        currentReport.status = { ...resolvedStatus };
+                        setCurrentReport(currentReport);
+                      });
+                    }
+                  }}
+                  className="w-full"
+                  variant="outline"
+                >
                   Resolve
                 </Button>
               </div>
