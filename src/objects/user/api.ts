@@ -63,6 +63,7 @@ export class UserAPI {
     if (!params) params = {};
     if (!params.limit) params.limit = 10;
     if (!params.skip) params.skip = 0;
+    if (!params.type) params.type = "user";
 
     try {
       const paramsStr = new URLSearchParams(params);
