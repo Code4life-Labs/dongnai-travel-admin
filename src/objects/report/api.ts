@@ -1,5 +1,8 @@
 import { API } from "src/api";
 
+// Import objects
+import { UserAPI } from "../user/api";
+
 // Import types
 import type { ReportType, ReportModelType } from "./types";
 import type { VNRecordType } from "src/types/general";
@@ -11,15 +14,20 @@ const api = new API({
 export class ReportAPI {
   /**
    * Update status of object
-   * @param status 
+   * @param status
    */
   static async updateReportStatus(id: string, status: VNRecordType) {
     try {
-      const response = await api.patch<Partial<ReportModelType>, ReportType>(`/reports/${id}`, { statusId: status._id }, {
-        headers: {
-          Authorization: API.generateBearerToken(API.getToken()) as string,
-        },
-      });
+      const user = UserAPI.getLocalUser();
+      const response = await api.patch<Partial<ReportModelType>, ReportType>(
+        `/users/${user._id}/reports/${id}`,
+        { statusId: status._id },
+        {
+          headers: {
+            Authorization: API.generateBearerToken(API.getToken()) as string,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("ReportAPI - Get reports:", error);

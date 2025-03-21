@@ -30,7 +30,7 @@ export default function UserCard(props: UserCardProps) {
         open();
         setCurrentViewUser(props.data);
       }}
-      className="relative grid grid-cols-12 cursor-grab bg-white shadow w-full items-center px-3 py-2 rounded-lg border mb-3"
+      className="relative grid grid-cols-12 cursor-pointer bg-white shadow w-full items-center px-3 py-2 rounded-lg border mb-3 hover:bg-slate-100"
     >
       {/* Avatar */}
       <div className="me-3 col-span-1">
@@ -53,8 +53,8 @@ export default function UserCard(props: UserCardProps) {
       </div>
 
       {/* Email */}
-      <div className="col-span-3">
-        <p>{props.data.email}</p>
+      <div className="col-span-4">
+        <p className="truncate">{props.data.email}</p>
       </div>
 
       {/* Created Date */}
@@ -65,13 +65,6 @@ export default function UserCard(props: UserCardProps) {
       {/* Updated Date */}
       <div className="col-span-2">
         <p>{DatetimeUtils.getShortDateStr(props.data.updatedAt!)} (updated)</p>
-      </div>
-
-      {/* Actions */}
-      <div className="flex justify-end col-span-1">
-        <Button size="icon" variant="outline">
-          <X />
-        </Button>
       </div>
     </div>
   );
