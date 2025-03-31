@@ -1,4 +1,4 @@
-import { ChevronsUpDown, LogOut, Users } from "lucide-react";
+import { ChevronsUpDown, LogOut, Users, User } from "lucide-react";
 
 // Import components
 import { Avatar, AvatarFallback, AvatarImage } from "src/components/ui/avatar";
@@ -35,8 +35,10 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src="https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_16x9.jpg" />
-                <AvatarFallback className="rounded-lg">User</AvatarFallback>
+                <AvatarImage src={user?.avatar} />
+                <AvatarFallback className="rounded-lg">
+                  <User />
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">

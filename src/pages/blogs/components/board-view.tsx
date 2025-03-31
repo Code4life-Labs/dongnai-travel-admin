@@ -61,6 +61,9 @@ export default function BoardView() {
 
               if (!status) return;
 
+              let description = BlogUtils.getDescription(
+                status.value === "verified" ? true : false
+              );
               let statusCircleClassName =
                 "w-5 h-5 rounded-full border border-[3px]";
               let statusCircleColor = BlogUtils.getStatusColor(
@@ -110,7 +113,7 @@ export default function BoardView() {
                         <Ellipsis />
                       </Button>
                     </div>
-                    <p className="mt-3">Description here</p>
+                    <p className="mt-3">{description}</p>
                   </header>
                   <hr className="my-3" />
                   <div className="flex flex-1 flex-col pt-1 px-3 items-center overflow-y-auto">

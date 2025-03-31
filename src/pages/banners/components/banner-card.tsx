@@ -43,7 +43,7 @@ export default function BannerCard(props: BannerCardProps) {
             href={props.data.brand.website}
             target="_blank"
           >
-            {props.data.brand.website}
+            Our website
           </a>
         </p>
       </div>
@@ -63,7 +63,7 @@ export default function BannerCard(props: BannerCardProps) {
           href={props.data.target}
           target="_blank"
         >
-          {props.data.target}
+          click here
         </a>
       </div>
 

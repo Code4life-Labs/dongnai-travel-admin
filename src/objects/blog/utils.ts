@@ -70,6 +70,31 @@ export class BlogUtils {
     return result;
   }
 
+  /**
+   * Get description for status of blog
+   * @param status
+   * @returns
+   */
+  static getDescription(status: boolean) {
+    let result = "";
+    let value = status === true ? "verified" : "unverified";
+
+    switch (value) {
+      case "unverified": {
+        result = "Blogs are un-reviewed or under reviewing.";
+        break;
+      }
+
+      case "verified": {
+        result =
+          "Blogs are satisfy our Terms and Conditions and contain right content.";
+        break;
+      }
+    }
+
+    return result;
+  }
+
   static toModel(blog?: BlogType) {
     if (!blog) return;
 

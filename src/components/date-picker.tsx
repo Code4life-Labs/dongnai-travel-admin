@@ -79,8 +79,6 @@ export function DatePickerForm({
       name={name}
       control={form.control}
       render={({ field }) => {
-        console.log("Field:", field);
-
         return (
           <FormItem>
             <FormLabel>{label}</FormLabel>

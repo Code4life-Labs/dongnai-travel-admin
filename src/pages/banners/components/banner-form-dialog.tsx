@@ -45,10 +45,13 @@ export default function BannerFormDialog() {
     updateBanner,
     isResponding,
     updateIsResponding,
+    setCurrentBanner,
   } = useBannerState();
 
   const [uploadPreview, setUploadPreview] = React.useState<string | null>(null);
   const [uploading, setUploading] = React.useState(false);
+
+  console.log("Current:", currentBanner);
 
   const form = useForm<BannerFormType>({
     defaultValues: currentBanner || {
@@ -106,9 +109,30 @@ export default function BannerFormDialog() {
   React.useEffect(() => {
     console.log("Current:", currentBanner);
     if (currentBanner) {
+      form.reset(currentBanner);
       setUploadPreview(currentBanner.image);
+    } else {
+      form.reset({
+        title: "",
+        image: "",
+        target: "",
+        brand: {
+          name: "",
+          logoUrl: "",
+          website: "",
+        },
+        isActive: true,
+        startDate: Date.now(),
+        endDate: Date.now(),
+      });
     }
   }, [currentBanner]);
+
+  React.useEffect(() => {
+    return function () {
+      setCurrentBanner(null);
+    };
+  }, []);
 
   return (
     <Dialog open={isOpen} onOpenChange={close}>

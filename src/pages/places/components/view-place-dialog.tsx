@@ -102,7 +102,11 @@ export default function ViewPlaceDialog() {
               <div>
                 <p className="font-bold">In Vietnamese</p>
                 <Textarea
-                  value={currentPlace ? currentPlace.content.vi : "Loading..."}
+                  value={
+                    currentPlace && currentPlace.content
+                      ? currentPlace.content.vi
+                      : "Loading..."
+                  }
                   disabled
                   className="min-h-[120px]"
                 />
@@ -110,7 +114,11 @@ export default function ViewPlaceDialog() {
               <div>
                 <p className="font-bold">In English</p>
                 <Textarea
-                  value={currentPlace ? currentPlace.content.en : "Loading..."}
+                  value={
+                    currentPlace && currentPlace.content
+                      ? currentPlace.content.en
+                      : "Loading..."
+                  }
                   disabled
                   className="min-h-[120px]"
                 />
