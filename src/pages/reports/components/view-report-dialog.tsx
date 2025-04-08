@@ -182,6 +182,7 @@ export default function ViewReportDialog() {
                       const reviewedStatus = reportStatuses.find(
                         (status) => status.value === "reviewed"
                       )!;
+
                       if (reviewedStatus.value !== currentReport.status.value) {
                         ReportAPI.updateReportStatus(
                           currentReport._id!,

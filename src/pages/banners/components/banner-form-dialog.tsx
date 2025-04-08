@@ -51,8 +51,6 @@ export default function BannerFormDialog() {
   const [uploadPreview, setUploadPreview] = React.useState<string | null>(null);
   const [uploading, setUploading] = React.useState(false);
 
-  console.log("Current:", currentBanner);
-
   const form = useForm<BannerFormType>({
     defaultValues: currentBanner || {
       title: "",

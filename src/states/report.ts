@@ -90,6 +90,7 @@ export const useReportState = create<ReportState & ReportActions>((set) => {
 
     setReportStatuses(reportStatuses: Array<VNRecordType> | null) {
       set((state) => {
+        console.log("Report statuses:", reportStatuses);
         return { ...state, reportStatuses };
       });
     },

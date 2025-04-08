@@ -37,7 +37,7 @@ function removeOutlineClassName(elements: any, statusName: string) {
  * @returns
  */
 export default function BoardView() {
-  const { blogsByStatus, blogStatuses, setCurrentBlog, updateBlog } =
+  const { blogs, blogsByStatus, blogStatuses, setCurrentBlog, updateBlog } =
     useBlogState();
   const columnRefs = React.useRef<Map<string, HTMLDivElement | null>>(
     new Map()
@@ -84,7 +84,16 @@ export default function BoardView() {
                     UserAPI.updateBlogMetadata(taskId, {
                       isApproved: status.value === "verified" ? true : false,
                     }).then((response) => {
-                      if (response?.data) updateBlog(response?.data);
+                      const oldBlog = blogs?.find(
+                        (blog) => blog._id === taskId
+                      );
+
+                      if (response?.data)
+                        updateBlog({
+                          ...oldBlog,
+                          isApproved:
+                            status.value === "verified" ? true : false,
+                        } as any);
                     });
 
                     // Un-highlight column
