@@ -64,33 +64,7 @@ export default function PlaceFormDialog() {
   const [uploadingImage, setUploadingImage] = React.useState(false);
 
   const form = useForm<PlaceFormType>({
-    defaultValues: currentPlace
-      ? PlaceUtils.toPreFormData(currentPlace)
-      : {
-          name: "",
-          url: "",
-          placeId: "",
-          isRecommended: false,
-          photos: [],
-          geometry: {
-            location: {
-              lat: 0,
-              lng: 0,
-            },
-            viewport: {
-              northeast: {
-                lat: 0,
-                lng: 0,
-              },
-              southwest: {
-                lat: 0,
-                lng: 0,
-              },
-            },
-          },
-          addressComponents: [],
-          types: [],
-        },
+    defaultValues: PlaceUtils.toPreFormData(currentPlace)
   });
 
   const onSubmit: SubmitHandler<PlaceFormType> = async (data) => {
@@ -256,13 +230,33 @@ export default function PlaceFormDialog() {
 
             <FormField
               control={form.control}
-              name="content"
+              name="contentVi"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Description (Vietnamese)</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Description of place..."
+                      className="min-h-[240px]"
+                      {...field}
+                    >
+                      {field.value}
+                    </Textarea>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+	    <FormField
+              control={form.control}
+              name="contentEn"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description (English)</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Description of place in..."
                       className="min-h-[240px]"
                       {...field}
                     >

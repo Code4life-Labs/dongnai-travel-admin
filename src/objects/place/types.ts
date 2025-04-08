@@ -59,7 +59,8 @@ export type PlaceFormType = {
   url: string;
   placeId: string;
   isRecommended: boolean;
-  content: string | any;
+  contentVi: string;
+  contentEn: string;
   photos: string[];
   newPhotos?: File[];
   deletePhotos?: string[];

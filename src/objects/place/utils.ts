@@ -73,7 +73,7 @@ export class PlaceUtils {
     return result;
   }
 
-  static toModel(place: PlaceType) {
+  static toModel(place: PlaceType = {}) {
     return {
       _id: place._id || "",
       name: place.name || "",
@@ -103,13 +103,15 @@ export class PlaceUtils {
     };
   }
 
-  static toPreFormData(place: PlaceType) {
+  static toPreFormData(place: PlaceType = {}) {
+    place = place || {};
     return {
       name: place.name || "",
       url: place.url || "",
       placeId: place.placeId || "",
       isRecommended: place.isRecommended || false,
-      content: place.content || "",
+      contentVi: place.content ? place.content.vi : "",
+      contentEn: place.content ? place.content.en : "",
       photos: place.photos || [],
       geometry: {
         location: {
@@ -140,7 +142,8 @@ export class PlaceUtils {
     formData.append("url", place.url || "");
     formData.append("placeId", place.placeId || "");
     formData.append("isRecommended", String(place.isRecommended || false));
-    formData.append("description", place.content || "");
+    if (place.contentVi) formData.append("content[vi]", place.contentVi || "");
+    if (place.contentEn) formData.append("content[en]", place.contentEn || "");
 
     // Append deletedPhotos, newPhotos as separate entries (assuming they are file objects or URLs)
     if (place.deletePhotos && place.deletePhotos.length > 0) {
